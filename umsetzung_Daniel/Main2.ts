@@ -10,7 +10,7 @@ namespace Main2  {
 
     function mirrorWords(_s: string): string {
         let output: string = "";
-        let wordSplit: string = _sd.Split(" ");
+        let wordSplit[]: string = _sd.Split(" ");
         for (let i: number = wordSplit.length - 1; i >= 0;) {
             output += wordSplit[i];
             i--;
@@ -19,7 +19,7 @@ namespace Main2  {
     }
     function mirrorString(_s: string): string {
         let output: string = "";
-        let sSplit: string = _s.split("");
+        let sSplit[]: string = _s.split("");
         for (let i: number = sSplit.length - 1; i >= 0;) {
             output += sSplit[i];
             i--;

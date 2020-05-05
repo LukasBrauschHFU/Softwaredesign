@@ -11,7 +11,7 @@ var Main2;
     prompt(s3);
     function mirrorWords(_s) {
         let output = "";
-        let wordSplit = _sd.Split(" ");
+        let wordSplit, [] = _sd.Split(" ");
         for (let i = wordSplit.length - 1; i >= 0;) {
             output += wordSplit[i];
             i--;
@@ -20,7 +20,7 @@ var Main2;
     }
     function mirrorString(_s) {
         let output = "";
-        let sSplit = _s.split("");
+        let sSplit, [] = _s.split("");
         for (let i = sSplit.length - 1; i >= 0;) {
             output += sSplit[i];
             i--;
