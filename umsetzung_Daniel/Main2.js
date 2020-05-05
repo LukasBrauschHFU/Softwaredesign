@@ -3,7 +3,7 @@ var Main2;
 (function (Main2) {
     let s = "Die Maus frisst den Käse";
     let s1 = mirrorWords(s);
-    let s1 = mirrorString(s1);
+    s1 = mirrorString(s1);
     prompt(s1);
     let s2 = mirrorWords(s);
     prompt(s2);

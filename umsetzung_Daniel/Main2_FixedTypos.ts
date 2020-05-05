@@ -1,7 +1,7 @@
 namespace Main2  {
     let s: string = "Die Maus frisst den Käse";
     let s1: string = mirrorWords(s);
-    let s1 = mirrorString(s1);
+    s1 = mirrorString(s1);
     prompt(s1);
     let s2: string = mirrorWords(s);
     prompt(s2);
