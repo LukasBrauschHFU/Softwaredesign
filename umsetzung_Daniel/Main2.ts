@@ -8,7 +8,7 @@ namespace Main2  {
     let s3: string = mirrorString(s);
     prompt(s3);
 
-    function mirrorWords(): string {
+    function mirrorWords(input: string): string {
         let output: string = "";
         let wordSplit: string = _sd.Split(" ");
         for (let i: number = wordSplit.length - 1; i >= 0;) {
@@ -17,7 +17,7 @@ namespace Main2  {
         }
         return output;
     }
-    function mirrorString(): string {
+    function mirrorString(input: string): string {
         let output: string = "";
         let sSplit: string = _s.split("");
         for (let i: number = sSplit.length - 1; i >= 0;) {
