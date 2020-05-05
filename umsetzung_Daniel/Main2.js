@@ -9,7 +9,7 @@ var Main2;
     prompt(s2);
     let s3 = mirrorString(s);
     prompt(s3);
-    function mirrorWords(input) {
+    function mirrorWords(_s) {
         let output = "";
         let wordSplit = _sd.Split(" ");
         for (let i = wordSplit.length - 1; i >= 0;) {
@@ -18,7 +18,7 @@ var Main2;
         }
         return output;
     }
-    function mirrorString(input) {
+    function mirrorString(_s) {
         let output = "";
         let sSplit = _s.split("");
         for (let i = sSplit.length - 1; i >= 0;) {
