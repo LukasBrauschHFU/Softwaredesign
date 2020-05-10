@@ -22,7 +22,7 @@ namespace Zufallsgedicht {
 
         picker = Math.floor(Math.random() * verbs.length - 1); //random Index between 0 and verbs.length-1;
 
-        let  newVerse = newverse + " " + verbs.splice(picker, 1);
+        let  newVerse: string = newverse + " " + verbs.splice(picker, 1);
         picker = Math.floor(Math.random() * verbs.length - 1); //random Index between 0 and objects.length-1;
         newVerse = newverse + " " + objects.splice(picker, 1);
 
