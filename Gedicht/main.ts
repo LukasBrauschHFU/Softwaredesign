@@ -15,7 +15,7 @@ namespace Zufallsgedicht {
 
 
     function getVerse(): string {
-        let newverse: string;
+        let newverse: string[];
         let picker: number = Math.floor(Math.random() * subjects.length - 1); //random Index between 0 and subjects.length-1; 
 
         newverse = subjects.splice(picker, 1);
@@ -26,7 +26,7 @@ namespace Zufallsgedicht {
         picker = Math.floor(Math.random() * verbs.length - 1); //random Index between 0 and objects.length-1;
         newVerse = newverse + " " + objects.splice(picker, 1);
 
-        return newverse;
+        return newVerse;
     }
 
 }
