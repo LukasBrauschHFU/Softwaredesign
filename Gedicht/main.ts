@@ -3,7 +3,7 @@ namespace Zufallsgedicht {
     let verbs: string[] = ["braut", "liebt"];
     let objects: string[] = ["Zaubertränke", "den Grimm"];
     let verses: string[] = [""];
-    let i: number = 0;
+    let i: number = 0; //magic numbers are not allowed, besser iObject
     if (subjects.length != 0 || verbs.length != 0 || objects.length != 0) {
         verses.push(getVerse());
         console.log(verses[i]);
