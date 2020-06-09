@@ -10,11 +10,11 @@ namespace Main2 {
     public answer: number = 0;
     askYesNoQuestion(): void {
       var randomNumber: number = Math.floor(Math.random());
-      var unnötig: YesNoQuestion = yesNoQuestionArray[randomNumber];
+      var filler: YesNoQuestion = yesNoQuestionArray[randomNumber];
       console.log(Question);
       var userInput: string | null = prompt("Please enter your answer");
       var userInput2: number = parseInt(userInput!);
-      if (userInput2 == unnötig.answer) {
+      if (userInput2 == filler.answer) {
         //Question.playerPoints + 1;
         console.log("Sehr gut, das war die richtige Antwort");
       }
@@ -39,11 +39,11 @@ namespace Main2 {
     answer: number = 0;
     askValueQuestion(): void {
       var randomNumber: number = Math.floor(Math.random());
-      var unnötig: ValueQuestion = valueQuestionArray[randomNumber];
+      var filler: ValueQuestion = valueQuestionArray[randomNumber];
       console.log(Question);
       var userInputConvert: string | null = prompt("Please enter your answer");
       var userInput: number = parseInt(userInputConvert!);
-      if (userInput == unnötig.answer) {
+      if (userInput == filler.answer) {
         //Question.playerPoints + 1;
         console.log("Sehr gut, das war die richtige Antwort");
       }
@@ -68,12 +68,12 @@ namespace Main2 {
     falseAnswer: string[];
     askSingleOrMultipleChoiceQuestion(): void {
       var randomNumber: number = Math.floor(Math.random());
-      var unnötig: SingleOrMultipleChoiceQuestion = singleOrMultipleChoiceQuestionArray[randomNumber];
-      var allAnswer: String[] = [unnötig.rightAnswer, unnötig.falseAnswer];
+      var filler: SingleOrMultipleChoiceQuestion = singleOrMultipleChoiceQuestionArray[randomNumber];
+      var allAnswer: String[] = [filler.rightAnswer, filler.falseAnswer];
       console.log(Question + allAnswers);
       var userInputConvert: string | null = prompt("Please enter your answer");
       var userInput: number[] = parseInt(userInputConvert!);
-      if (userInput.length == unnötig.rightAnswer.length) {
+      if (userInput.length == filler.rightAnswer.length) {
         var i: number = 0;
         var j: number = 0;
         if (j < userInput.length) {
@@ -108,18 +108,18 @@ namespace Main2 {
     answer: string;
     askFreeTextQuestion(): void {
       var randomNumber: number = Math.floor(Math.random());
-      var unnötig: FreeTextQuestion = freeTextQuestionArray[randomNumber];
+      var filler: FreeTextQuestion = freeTextQuestionArray[randomNumber];
       console.log(Question);
       var userInputConvert: string | null; = prompt("Please enter your answer");
       var userInput: string = userInputConvert!;
       userInput.split("");
-      if (userInput.length != unnötig.answer.length) {
+      if (userInput.length != filler.answer.length) {
         console.log("Deine Antwort ist leider falsch");
       }
       else {
         var i: number = 0;
-        if (i < unnötig.answer.length) {
-          if (unnötig.answer[i] == userInput[i]) {
+        if (i < filler.answer.length) {
+          if (filler.answer[i] == userInput[i]) {
             i = i + 1;
           }
           else {
