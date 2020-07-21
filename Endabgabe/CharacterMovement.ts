@@ -11,7 +11,7 @@ function changePosition(): void {
     var playerposYBackup: number = playerposY;
     
     //Debug Step
-    userInput = "s";
+    userInput = prompt();
     console.log(userInput);
     //Debug End
     
@@ -51,3 +51,4 @@ function changePosition(): void {
         console.log("New position: " +  playerposX + " " + playerposY );
     }
     }
+    

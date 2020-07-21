@@ -1,0 +1,40 @@
+import { enemyArray } from "./Enemies";
+import {myArray} from "./Maps.js";
+import {playerposX, playerposY} from "./CharacterMovement.js";
+export {battleStart};
+
+class Enemy {
+  public name: string = "";
+  public health: number = 0;
+  public damage: number = 0;
+  public description: String = "";
+  public items: number = 0;
+  public id: number = 0;
+  }
+
+
+//export 
+var activeEnemyArray: Enemy[] = [];
+let enemyRoom = myArray.find(i => i.posX === playerposX && i.posY === playerposY);
+let enemyCurrent = enemyArray.find(i => i.id === enemyRoom.roomEnemy);
+battleStart
+function battleStart(): void {
+buildCurrentEnemy;
+}
+
+
+//status changes
+function buildCurrentEnemy(): void {
+    activeEnemyArray.push(enemyCurrent);
+}
+
+
+function burning(): void{
+    // Search for enemy currently in the same room as player
+   
+    enemyCurrent.damage = enemyCurrent.damage - 1;
+    activeEnemyArray.push(enemyCurrent);
+    //Debug
+    console.log(activeEnemyArray);
+      }
+   

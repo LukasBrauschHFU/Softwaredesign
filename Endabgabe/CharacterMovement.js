@@ -9,7 +9,7 @@ function changePosition() {
     var playerposXBackup = playerposX;
     var playerposYBackup = playerposY;
     //Debug Step
-    userInput = "s";
+    userInput = prompt();
     console.log(userInput);
     //Debug End
     switch (userInput) {
