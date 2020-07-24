@@ -5,21 +5,18 @@ export class Enemy {
         this.health = 0;
         this.damage = 0;
         this.description = "";
-        //inventory of enemy
+        //inventory of enemie
         this.items = 0;
         //ID of enemy
         this.id = 0;
-        // how the enemy acts
+        // How ther enemy acts and if he is an inteligent NPC
         this.behavior = 0;
-        //to check if the enemy was activated
+        //t check if the enemy was activated
         this.isActive = false;
-    }
-}
-export class BossEnemy extends Enemy {
-    constructor() {
-        super(...arguments);
-        this.itemDropped = 0;
-        this.musicPlayed = 0;
+        //Item the enemy could drop
+        this.droppedItem = 0;
+        //Add Path to the song you want to play while fighting this enemy
+        this.playedMusic = "";
     }
 }
 //enemy1
@@ -35,14 +32,22 @@ enemy2.health = 1;
 enemy2.damage = 1;
 enemy2.name = "TestenemyNumeroDos";
 enemy2.id = 1;
-enemy2.description = "You are now in enemy 2";
+enemy2.description = "Fear his buggyness";
+//enemy3
+let enemy3 = new Enemy;
+enemy3.health = 1;
+enemy3.damage = 1;
+enemy3.name = "Steve";
+enemy3.id = 3;
+enemy3.description = "Best Tech Support";
 // Bossenemy
-let enemyBossroom = new BossEnemy;
-enemyBossroom.health = 177013;
-enemyBossroom.damage = 2010;
-enemyBossroom.name = "Hououin Kyouma";
+let enemyBossroom = new Enemy;
+enemyBossroom.health = 1;
+enemyBossroom.damage = 0;
+enemyBossroom.name = "Ruby";
 enemyBossroom.id = 2;
-enemyBossroom.description = "Tuturu";
+enemyBossroom.description = "Ganbanruby";
+enemyBossroom.playedMusic = "./JirkMixV1.mp3";
 pushenemys();
 function pushenemys() {
     enemyArray.push(enemy1);
