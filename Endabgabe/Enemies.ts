@@ -51,7 +51,7 @@ enemyBossroom.damage = 0;
 enemyBossroom.name = "Ruby";
 enemyBossroom.id = 2;
 enemyBossroom.description = "Ganbanruby";
-enemyBossroom.playedMusic = "./JirkMixV1.mp3";
+enemyBossroom.playedMusic = "https://sftp.hs-furtwangen.de/~brauschl/music/Snow.mp3";
 
 
 pushenemys();
