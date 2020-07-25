@@ -7,6 +7,7 @@ export function CreateMap() {
     let foundRoom = myArray.find(i => i.posX === playerposX && i.posY === playerposY);
     if (foundRoom == undefined) {
         console.log("No room in that direction");
+        document.getElementById("GameText").textContent = "No room in that direction";
         roomNotThere = true;
     }
     else {

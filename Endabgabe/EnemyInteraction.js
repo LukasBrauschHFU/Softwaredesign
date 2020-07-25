@@ -2,7 +2,7 @@ import { enemyCurrent } from "./battlesystem.js";
 import { Enemy } from "./Enemies.js";
 export var friendArray = [];
 export { interactWithEnemy1, interactWithEnemy2, interactWithEnemy3 };
-var answer = prompt();
+var answer = "";
 //Functions that show the interactions between enemy behavior-types
 //Tsundere
 function interactWithEnemy1() {

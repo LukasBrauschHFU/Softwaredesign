@@ -3,7 +3,7 @@ import { Enemy } from "./Enemies.js";
 export var friendArray: Enemy[] = [];
 export { interactWithEnemy1, interactWithEnemy2, interactWithEnemy3 };
 
-var answer: string = prompt();
+var answer: string = "";
 
 //Functions that show the interactions between enemy behavior-types
 //Tsundere
