@@ -1,6 +1,6 @@
 import { changePosition, successfullChangeCharaMovement } from "./CharacterMovement.js";
 import { battleStart, successfullBattleMove, extraOption, talking, fight, useItem, pickupItem, dropItem } from "./Battlesystem.js";
-export var choice = document.getElementById("vorname").value;
+export var choice = document.getElementById("textInput").value;
 export var btn = document.getElementById("button2");
 export var selectedOption = 0;
 var btnstart = document.getElementById("coolbutton");
@@ -15,7 +15,7 @@ function showNewButton() {
 }
 //Alternativ: Alle Funktionen von überall aus aufrufen
 function choiceSelector() {
-    choice = document.getElementById("vorname").value;
+    choice = document.getElementById("textInput").value;
     console.log("extraoption" + extraOption);
     if (selectedOption == 0) {
         console.log("Select 1 or 2");
@@ -65,7 +65,7 @@ function choiceSelector() {
     }
 }
 function charaMover() {
-    choice = document.getElementById("vorname").value;
+    choice = document.getElementById("textInput").value;
     console.log("Where do you want to go ?");
     console.log(choice);
     changePosition();
@@ -74,7 +74,7 @@ function charaMover() {
     }
 }
 function fightingStart() {
-    choice = document.getElementById("vorname").value;
+    choice = document.getElementById("textInput").value;
     pushableText = "What do you want to do ?";
     addNewText();
     console.log("What do you want to do ?");

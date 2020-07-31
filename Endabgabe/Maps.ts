@@ -7,10 +7,11 @@ class Map {
     public posY: number = 0;
     public description: String = "";
     public items: Item[] = [];
-    public needsKey: boolean = false;
+    public locked: boolean = false;
+    public unlockItem: number = 0;
     //See which enemy is in the room, sorted by ID
-    public roomEnemy: number = 0;
-    //Checks if there still is an enemie in the room
+    public roomEnemy: number = null;
+    //Checks if there still is enemie in the room
     //public enemyDefeated: boolean = false;
     public songAudio: string = "";
     }
@@ -21,6 +22,8 @@ map1.posX = 0;
 map1.posY = 1;
 map1.name = "TestMap";
 map1.roomEnemy = 1;
+map1.locked = true;
+map1.unlockItem = 2;
 map1.items = [item2];
 map1.description = "You are now in Map 1";
 

@@ -1,10 +1,13 @@
 import { CreateMap, roomNotThere } from "./CreateWorld.js";
+import { mapArray } from "./Maps.js";
+;
 //import {battleStart} from "./Battlesystem.js";
 import { choice } from "./test.js";
 export var playerposX = 1;
 export var playerposY = 1;
 export var successfullChangeCharaMovement = false;
 export { changePosition };
+var nextMap = mapArray.find(i => i.posX === playerposX && i.posY === playerposY);
 function changePosition(direction) {
     var userInput = choice;
     // Backups the current position in case there is no room where the player is moving to
@@ -18,27 +21,52 @@ function changePosition(direction) {
     switch (direction) {
         // Changes Player position based on input
         case "n": {
-            document.getElementById("GameText").textContent = "You went north";
-            playerposY = playerposY + 1;
-            successfullChangeCharaMovement = true;
+            //Check if Map needs a key to be accessed
+            nextMap = mapArray.find(i => i.posX === playerposX && i.posY === playerposY + 1);
+            if (nextMap != undefined && nextMap.locked == true) {
+                document.getElementById("GameText").textContent = "This door seems to need a key to be opened";
+            }
+            else {
+                document.getElementById("GameText").textContent = "You went north";
+                playerposY = playerposY + 1;
+                successfullChangeCharaMovement = true;
+            }
             break;
         }
         case "e": {
-            document.getElementById("GameText").textContent = "You went east";
-            playerposX = playerposX - 1;
-            successfullChangeCharaMovement = true;
+            nextMap = mapArray.find(i => i.posX === playerposX - 1 && i.posY === playerposY);
+            if (nextMap != undefined && nextMap.locked == true) {
+                document.getElementById("GameText").textContent = "This door seems to need a key to be opened";
+            }
+            else {
+                document.getElementById("GameText").textContent = "You went east";
+                playerposX = playerposX - 1;
+                successfullChangeCharaMovement = true;
+            }
             break;
         }
         case "w": {
-            document.getElementById("GameText").textContent = "You went west";
-            playerposX = playerposX + 1;
-            successfullChangeCharaMovement = true;
+            nextMap = mapArray.find(i => i.posX === playerposX + 1 && i.posY === playerposY);
+            if (nextMap != undefined && nextMap.locked == true) {
+                document.getElementById("GameText").textContent = "This door seems to need a key to be opened";
+            }
+            else {
+                document.getElementById("GameText").textContent = "You went west";
+                playerposX = playerposX + 1;
+                successfullChangeCharaMovement = true;
+            }
             break;
         }
         case "s": {
-            document.getElementById("GameText").textContent = "You went south";
-            playerposY = playerposY - 1;
-            successfullChangeCharaMovement = true;
+            nextMap = mapArray.find(i => i.posX === playerposX && i.posY === playerposY - 1);
+            if (nextMap != undefined && nextMap.locked == true) {
+                document.getElementById("GameText").textContent = "This door seems to need a key to be opened";
+            }
+            else {
+                document.getElementById("GameText").textContent = "You went south";
+                playerposY = playerposY - 1;
+                successfullChangeCharaMovement = true;
+            }
             break;
         }
         default: {

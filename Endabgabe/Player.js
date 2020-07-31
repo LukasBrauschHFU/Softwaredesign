@@ -13,7 +13,7 @@ let player = new Player;
 player.maximumHealth = 10;
 player.currentHealth = 10;
 player.damage = 3;
-player.startItem = "Torch";
+player.startItem = "Key";
 player.positionX = 1;
 player.positionY = 1;
 export { player };

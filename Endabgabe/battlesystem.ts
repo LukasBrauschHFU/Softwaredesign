@@ -11,10 +11,10 @@ export var battleIsActive: boolean = false;
 export var activeEnemyArray: Enemy[] = [];
 //Creates new Array for all currently active enemies
 // Looks for the room the player and enemy are currently in
-let enemyRoom = mapArray.find(i => i.posX === playerposX && i.posY === playerposY);
+let currentRoom = mapArray.find(i => i.posX === playerposX && i.posY === playerposY);
 // Finds what enemy is currently in the room(unsure Type)
-export var enemyCurrent: Enemy = enemyArray.find(i => i.id === enemyRoom.roomEnemy);
-var myAudio: HTMLAudioElement = new Audio(enemyCurrent.playedMusic)
+export var enemyCurrent: Enemy = enemyArray.find(i => i.id === currentRoom.roomEnemy);
+ var myAudio: HTMLAudioElement = new Audio(enemyCurrent.playedMusic);
 var extraOption: number;
 var audioIsPlaying: boolean
 var user: string = "";
@@ -24,17 +24,19 @@ var user: string = "";
 function battleStart(): void {
  //Searches for enemy currently in the room to check if he is active
  document.getElementById("GameText").textContent = "In the room you see " + "\n" + "\n" + enemyCurrent.name + "\n" + itemsInRoomName + "\n" + "What do you want to do ?" + "\n" + "attack (a), talk (t), run (r), inventory (i), pickup item (p), drop Item (d)";
- enemyRoom = mapArray.find(i => i.posX === playerposX && i.posY === playerposY);
- var itemsInRoomName = enemyRoom.items.map(a => a.name)
+ currentRoom = mapArray.find(i => i.posX === playerposX && i.posY === playerposY);
+ var itemsInRoomName = currentRoom.items.map(a => a.name)
  //Debug
- console.log(enemyRoom);
- enemyCurrent = enemyArray.find(i => i.id === enemyRoom.roomEnemy);
+ console.log(currentRoom);
+ enemyCurrent = enemyArray.find(i => i.id === currentRoom.roomEnemy);
  if (enemyCurrent == null){
    console.log("No enemy here");
  }
+ else{
  if(audioIsPlaying != true){
+
   //Plays Enemy music
- myAudio.play();
+ //myAudio.play();
  audioIsPlaying = true;}
  
  var selection: string =  choice;
@@ -103,10 +105,15 @@ default: {
   battleIsActive = false;
 }
 }
-
+}
 
 //fighting option
 function fight(): void {
+  //check if there is an enemy in the room
+  if (enemyCurrent == undefined){
+    document.getElementById("GameText").textContent = "There is no enemy here";
+  }
+  else{
   //Player attacks enemy
   enemyCurrent.currentHealth = enemyCurrent.currentHealth - player.damage;
   //If the enemy has item: decide on random factor if he uses it or attacks 
@@ -127,7 +134,7 @@ function fight(): void {
   document.getElementById("GameText").textContent = "You attacked the " + enemyCurrent.name + ". " + "Its health dropped to " + enemyCurrent.currentHealth;
     if (player.currentHealth >= 0){
       document.getElementById("GameText2").textContent = "The enemy attacked you." + "Your health dropped to " + player.currentHealth;
-      extraOption = 0;
+      //extraOption = 0;
         }
       else{
           document.getElementById("GameText2").textContent = "Your health hit zero. You died";
@@ -151,7 +158,7 @@ function fight(): void {
       document.getElementById("GameText2").textContent = "Your health hit 0. You died";
   //funktion zum laden /resetten hier
     }
-  }}
+  }}}
 
 //Item useage
 
@@ -169,13 +176,20 @@ function usePlayerInventory(): void {
   switch(requestedItem.name) {
     case("Torch"): {
          burning();
+         itemArrayPlayer.splice(itemArrayPlayer.findIndex(item => item.name === requestedItem.name), 1)
          break;
          //then remove item from inventory
     }
     case("Ultrapotion"): {
       healing();
+      itemArrayPlayer.splice(itemArrayPlayer.findIndex(item => item.name === requestedItem.name), 1)
       break;
  }
+ case("Key"): {
+  unlockDoor(requestedItem.id);
+  //Hier nicht löschen, weil wiederverwertbar
+  break;
+}
     
 }
   }
@@ -195,7 +209,6 @@ function useEnemyInventory(): void {
           console.log("Enemy Uses Burning");
           user = "enemy";
           burning();
-          //remove item from array
           break;
         } 
         case("Ultrapotion"): {
@@ -211,19 +224,19 @@ function useEnemyInventory(): void {
 
 //pickup item in room
 function pickupItem(): void {
-  console.log(enemyRoom.items)
-  var itemNames = enemyRoom.items.map(a => a.name)
+  console.log(currentRoom.items)
+  var itemNames = currentRoom.items.map(a => a.name)
   //console.log(itemNames);
   document.getElementById("GameText").textContent = "Which of these items do you want to pick up: " + itemNames;
   if (level == 1){
   //Select Item from Room
   var itemselected : string =  choice
   //system for Item use(add check if item is in player inventory)
-  var requestedItem = enemyRoom.items.find(i => i.name === itemselected);
+  var requestedItem = currentRoom.items.find(i => i.name === itemselected);
   if (requestedItem !== undefined){
          //remove Item from room and push to player
-         enemyRoom.items.splice(enemyRoom.items.findIndex(item => item.name === requestedItem.name), 1)
-         console.log(enemyRoom.items)
+         currentRoom.items.splice(currentRoom.items.findIndex(item => item.name === requestedItem.name), 1)
+         console.log(currentRoom.items)
          itemArrayPlayer.push(requestedItem);
          console.log(itemArrayPlayer);
 }else if(itemselected == "none"){
@@ -248,9 +261,9 @@ function dropItem(): void {
   if (requestedItem !== undefined){
          //Delete selected Item from in ventory and push it into map
          itemArrayPlayer.splice(itemArrayPlayer.findIndex(item => item.name === requestedItem.name), 1)
-         enemyRoom.items.push(requestedItem);
+         currentRoom.items.push(requestedItem);
          console.log("Player inventory: " + itemArrayPlayer);
-         console.log("Room item:" + enemyRoom.items);
+         console.log("Room item:" + currentRoom.items);
 } 
 else if(itemselected == "none"){
 console.log("You didn´t drop an item");
@@ -308,6 +321,32 @@ function burning(): void {
         document.getElementById("GameText").textContent = "The " + enemyCurrent.name + " drank a potion. Its health was restored";
       }
       }}    
+     
+      function unlockDoor(sendItem: number): void {
+        console.log("check Key")
+        console.log(sendItem);
+        var checkRoom1 = mapArray.find(i => i.posX === currentRoom.posX + 1);
+        var checkRoom2 = mapArray.find(i => i.posX === currentRoom.posX - 1);
+        var checkRoom3 = mapArray.find(i => i.posX === currentRoom.posY + 1);
+        var checkRoom4 = mapArray.find(i => i.posX === currentRoom.posY - 1);
+        //find Array Entry with currentRoom Pos x +1 etc, then check for key
+        if (checkRoom1 != undefined && checkRoom1.unlockItem == sendItem){
+          checkRoom1.locked = false;
+          console.log("Key matches");
+        }
+        if (checkRoom2 != undefined && checkRoom2.unlockItem == sendItem){
+          checkRoom2.locked = false;
+          console.log("Key matches");
+        }
+        if (checkRoom3 != undefined && checkRoom3.unlockItem == sendItem){
+          checkRoom3.locked = false;
+          console.log("Key matches");
+        }
+        if (checkRoom4 != undefined && checkRoom4.unlockItem == sendItem){
+          checkRoom4.locked = false;
+          console.log("Key matches");
+        }
+        }
 
 //interaction option
       function talking(): void {

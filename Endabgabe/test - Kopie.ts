@@ -1,7 +1,7 @@
 import {changePosition, successfullChangeCharaMovement} from "./CharacterMovement.js";
 import {battleStart, successfullBattleMove, extraOption, talking, fight, useItem, pickupItem, dropItem} from "./Battlesystem.js";
 
-export var choice: string = (<HTMLInputElement>document.getElementById("vorname")).value;
+export var choice: string = (<HTMLInputElement>document.getElementById("textInput")).value;
 export var btn: HTMLElement = document.getElementById("button2");
 export var selectedOption: number = 0;
 
@@ -19,7 +19,7 @@ document.getElementById("GameText").textContent = "Welcome";
 }
 //Alternativ: Alle Funktionen von überall aus aufrufen
 function choiceSelector(): void {
-    choice = (<HTMLInputElement>document.getElementById("vorname")).value;
+    choice = (<HTMLInputElement>document.getElementById("textInput")).value;
     console.log("extraoption" + extraOption);
     if (selectedOption == 0) {
         console.log("Select 1 or 2");
@@ -59,7 +59,7 @@ else {
     
 
 function charaMover(): void {
-        choice = (<HTMLInputElement>document.getElementById("vorname")).value;
+        choice = (<HTMLInputElement>document.getElementById("textInput")).value;
         console.log("Where do you want to go ?");
         console.log(choice); 
         changePosition();
@@ -70,7 +70,7 @@ function charaMover(): void {
         
 
 function fightingStart(): void {
-            choice = (<HTMLInputElement>document.getElementById("vorname")).value;
+            choice = (<HTMLInputElement>document.getElementById("textInput")).value;
             pushableText = "What do you want to do ?";
             addNewText();
             console.log("What do you want to do ?");

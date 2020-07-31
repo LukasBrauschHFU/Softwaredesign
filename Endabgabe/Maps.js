@@ -7,10 +7,11 @@ class Map {
         this.posY = 0;
         this.description = "";
         this.items = [];
-        this.needsKey = false;
+        this.locked = false;
+        this.unlockItem = 0;
         //See which enemy is in the room, sorted by ID
-        this.roomEnemy = 0;
-        //Checks if there still is an enemie in the room
+        this.roomEnemy = null;
+        //Checks if there still is enemie in the room
         //public enemyDefeated: boolean = false;
         this.songAudio = "";
     }
@@ -22,6 +23,8 @@ map1.posX = 0;
 map1.posY = 1;
 map1.name = "TestMap";
 map1.roomEnemy = 1;
+map1.locked = true;
+map1.unlockItem = 2;
 map1.items = [item2];
 map1.description = "You are now in Map 1";
 //Map2

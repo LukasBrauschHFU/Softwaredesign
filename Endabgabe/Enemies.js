@@ -19,7 +19,7 @@ export class Enemy {
         //Item the enemy could drop
         this.droppedItem = "";
         //Add Path to the song you want to play while fighting this enemy
-        this.playedMusic = "";
+        this.playedMusic = "https://sftp.hs-furtwangen.de/~brauschl/music/gameMusic/enemy/gsl.mp3";
     }
 }
 //enemy1

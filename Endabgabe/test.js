@@ -1,6 +1,6 @@
 import { changePosition } from "./CharacterMovement.js";
 import { battleStart, talking, fight, useItem, pickupItem, dropItem } from "./Battlesystem.js";
-export var choice = document.getElementById("vorname").value;
+export var choice = document.getElementById("textInput").value;
 export var btn = document.getElementById("button2");
 export var selectedOption = 0;
 export var level = 0;
@@ -16,7 +16,7 @@ function showNewButton() {
     document.getElementById("GameText").textContent = "Welcome";
 }
 function fightingStart() {
-    choice = document.getElementById("vorname").value;
+    choice = document.getElementById("textInput").value;
     pushableText = "What do you want to do ?";
     addNewText();
     console.log(choice);
@@ -111,6 +111,7 @@ function fightingStart() {
             }
         }
     }
+    document.getElementById("textInput").value = "";
 }
 function addNewText() {
     var newDiv = document.createElement("div");
