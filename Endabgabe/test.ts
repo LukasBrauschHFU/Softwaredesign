@@ -1,122 +1,111 @@
 import {changePosition, successfullChangeCharaMovement} from "./CharacterMovement.js";
-import {battleStart, successfullBattleMove} from "./Battlesystem.js";
+import {battleStart, battleIsActive, extraOption, talking, fight, useItem, pickupItem, dropItem} from "./Battlesystem.js";
 
 export var choice: string = (<HTMLInputElement>document.getElementById("vorname")).value;
 export var btn: HTMLElement = document.getElementById("button2");
 export var selectedOption: number = 0;
 
-
+export var level: number = 0;
+var selectedOption2: string = "";
 var btnstart: HTMLElement = document.getElementById("coolbutton");
 btnstart.addEventListener("click", () => showNewButton());
-
-
-
-//choice = (<HTMLInputElement>document.getElementById("vorname")).value;
-btn.addEventListener("click", () => letsGo());
-
-/*function start(): void {
- choice = (<HTMLInputElement>document.getElementById("vorname")).value;
- console.log(choice);
- if (choice == "start") {
-     choice = "";
-     flag = true;
-     //letsGo();
-     
-     console.log("Oh hello there");
-    //Reset textbox
-     (document.getElementById("vorname") as HTMLFormElement).value = "";
-     (document.getElementById("coolbutton") as HTMLFormElement).value = "Submit";
-   
-}
-}*/
-
-
-
+btn.addEventListener("click", () => fightingStart());
+//Variable for pushing new text to the function that creates it
+var pushableText: string = "";
 
 function showNewButton(): void {
-
+document.getElementById("coolbutton").style.display = "none";
 document.getElementById("button2").style.display = "";
 document.getElementById("GameText").textContent = "Welcome";
 }
 
-//*function letsGo(): void {
-  //  if (selectedOption == 0) {
- //       console.log(selectedOption);
-///console.log("Do you want to 1. Move or 2. Fight"); }
- //   choice = (<HTMLInputElement>document.getElementById("vorname")).value;
- //   switch (choice) {
- //   
- //   case("1"): {
- //       selectedOption = 1;
- //       change();
- //       break; }
-  //  //change();
-  //  case("2"): {battleStart();
-  //              break; }
-  //  default: {break; }
-  //  }
-  //  } 
-    //burning();
-
-
-function letsGo(): void {
-        choice = (<HTMLInputElement>document.getElementById("vorname")).value;
-        
-        if (selectedOption == 0) {
-            console.log("Select 1 or 2");
-            console.log(choice); 
-            switch (choice) {
-            case("start"): {
-                selectedOption = 0;
-                console.log("Why");
-                break; }
-        case("1"): {
-            selectedOption = 1;
-            charaMover();
-            break; }
-        //change();
-        case("2"): {
-        selectedOption = 2;
-        fightingStart();
-        break; }
-        default: {break; }
-        }}
-    else {
-        switch (selectedOption) {
-            case(1): {
-                charaMover();
-                break; }
-            //change();
-            case(2): {
-                fightingStart();
-                break; }
-            default: {break; }
-
-        }
-    }}
-        
-        //burning();
-
-
-
-
-function charaMover(): void {
-            choice = (<HTMLInputElement>document.getElementById("vorname")).value;
-            console.log("Where do you want to go ?");
-            console.log(choice); 
-            changePosition();
-            if (successfullChangeCharaMovement == true) {
-                selectedOption = 0;
-            }
-         }
-            
-
 function fightingStart(): void {
-                choice = (<HTMLInputElement>document.getElementById("vorname")).value;
-                console.log("What do you want to do ?");
-                console.log(choice); 
-                battleStart();
-                if (successfullBattleMove == true) {
-                    selectedOption = 0;
-                    console.log(selectedOption);
-                }}
+            choice = (<HTMLInputElement>document.getElementById("vorname")).value;
+            pushableText = "What do you want to do ?";
+            addNewText();
+            console.log(choice); 
+            battleStart();
+            switch (level) {
+                case(1): {
+                    switch (selectedOption2) {
+                        case("t"): {
+                            talking();
+                            break; }
+                        /*case("a"): {
+                            fight();
+                            break; }
+*/                        case("i"): {
+                            useItem();
+                            level = 0;
+                            break; }   
+                        case("p"): {
+                            pickupItem();
+                            level = 0;
+                            break; }              
+                        case("d"): {
+                            dropItem();
+                            level = 0;
+                            break; } 
+                        case("6"): {
+                            selectedOption = 0;
+                            break; }               
+                        default: {
+                            break; }
+                        }} 
+                case(0): {
+                    switch (choice) {
+                        case("t"): {
+                            talking();
+                            break; }
+                        case("a"): {
+                            fight();
+                            //selectedOption2 = ("a");
+                            //level = 1;
+                            break; }
+                        case("i"): {
+                            useItem();
+                            selectedOption2 = ("i");
+                            level = 1;
+                            break; }   
+                        case("p"): {
+                            pickupItem();
+                            selectedOption2 = ("p");
+                            level = 1;
+                            break; }
+                        case("move north"): {
+                            changePosition("n");
+                            break; }  
+                        case("move south"): {
+                            changePosition("s");
+                            break; } 
+                        case("move east"): {
+                            changePosition("e");
+                            break; } 
+                        case("move west"): {
+                            changePosition("w");
+                            break; }               
+                        case("d"): {
+                            dropItem();
+                            selectedOption2 = ("d");
+                            level = 1;
+                            break; } 
+                        case("6"): {
+                            selectedOption = 0;
+                            break; }               
+                        default: {
+                            break; }
+                        }}
+            }}
+
+
+function addNewText(): void {        
+                var newDiv = document.createElement("div"); 
+                // and give it some content 
+                var newContent = document.createTextNode(pushableText); 
+                // add the text node to the newly created div
+                newDiv.appendChild(newContent);  
+              
+                // add the newly created element and its content into the DOM 
+                var currentDiv = document.getElementById("div1"); 
+                document.body.insertBefore(newDiv, currentDiv);    
+                }             

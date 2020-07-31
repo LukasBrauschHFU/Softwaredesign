@@ -4,7 +4,14 @@ export var friendArray: Enemy[] = [];
 export { interactWithEnemy1, interactWithEnemy2, interactWithEnemy3 };
 
 var answer: string = "";
+var btnstart: HTMLElement = document.getElementById("talkButton");
+btnstart.addEventListener("click", () => interactWithEnemy1());
 
+function changeButton(): void {
+    document.getElementById("talkButton").style.display = "";
+    document.getElementById("button2").style.display = "none";
+    document.getElementById("GameText").textContent = "You can now talk to the enemy";
+}
 //Functions that show the interactions between enemy behavior-types
 //Tsundere
 function interactWithEnemy1(): void {
