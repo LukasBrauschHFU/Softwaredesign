@@ -17,8 +17,9 @@ function showNewButton() {
 }
 function fightingStart() {
     choice = document.getElementById("textInput").value;
-    pushableText = "What do you want to do ?";
-    addNewText();
+    document.getElementById("GameText").textContent = "";
+    document.getElementById("GameText2").textContent = "";
+    document.getElementById("Help").textContent = "";
     console.log(choice);
     battleStart();
     switch (level) {
@@ -34,10 +35,7 @@ function fightingStart() {
                     level = 2;
                     break;
                 }
-                /*case("a"): {
-                    fight();
-                    break; }
-*/ case ("i"): {
+                case ("i"): {
                     useItem();
                     level = 0;
                     break;
@@ -147,6 +145,10 @@ function fightingStart() {
             }
         }
     }
+    pushableText = document.getElementById("GameText").textContent;
+    ;
+    addNewText();
+    //document.getElementById("GameTextLast").textContent  =  document.getElementById("GameText").textContent; 
     document.getElementById("textInput").value = "";
 }
 function addNewText() {

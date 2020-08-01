@@ -20,8 +20,9 @@ document.getElementById("GameText").textContent = "Welcome";
 
 function fightingStart(): void {
             choice = (<HTMLInputElement>document.getElementById("textInput")).value;
-            pushableText = "What do you want to do ?";
-            addNewText();
+            document.getElementById("GameText").textContent = ""; 
+            document.getElementById("GameText2").textContent = ""; 
+            document.getElementById("Help").textContent = ""; 
             console.log(choice); 
             battleStart();
             switch (level) {
@@ -36,10 +37,7 @@ function fightingStart(): void {
                             talking();
                             level = 2;
                             break; }
-                        /*case("a"): {
-                            fight();
-                            break; }
-*/                        case("i"): {
+                       case("i"): {
                             useItem();
                             level = 0;
                             break; }   
@@ -125,11 +123,15 @@ function fightingStart(): void {
                             break; }
                         }}
             }
+            pushableText = document.getElementById("GameText").textContent;;
+            addNewText();
+            //document.getElementById("GameTextLast").textContent  =  document.getElementById("GameText").textContent; 
             (<HTMLInputElement>document.getElementById("textInput")).value = "";
         }
 
 
-function addNewText(): void {        
+function addNewText(): void {    
+        
                 var newDiv = document.createElement("div"); 
                 // and give it some content 
                 var newContent = document.createTextNode(pushableText); 
