@@ -1,17 +1,18 @@
 import { enemyArray } from "./Enemies.js";
 import { mapArray } from "./Maps.js";
+import { enemyIsFriend } from "./EnemyInteraction.js";
 import { interactWithEnemy1, interactWithEnemy2, interactWithEnemy3 } from "./EnemyInteraction.js";
 import { playerposX, playerposY } from "./CharacterMovement.js";
 import { choice, level } from "./test.js";
 import { itemArrayPlayer } from "./Items.js";
 import { player } from "./Player.js";
-export { battleStart, burning, talking, fight, usePlayerInventory as useItem, pickupItem, dropItem, extraOption };
+export { battleStart, burning, talking, fight, usePlayerInventory as useItem, pickupItem, dropItem, look, extraOption };
 export var battleIsActive = false;
 //Creates new Array for all currently active enemies
 export var activeEnemyArray = [];
 //Creates new Array for all currently active enemies
 // Looks for the room the player and enemy are currently in
-let currentRoom = mapArray.find(i => i.posX === playerposX && i.posY === playerposY);
+export var currentRoom = mapArray.find(i => i.posX === playerposX && i.posY === playerposY);
 // Finds what enemy is currently in the room(unsure Type)
 export var enemyCurrent = enemyArray.find(i => i.id === currentRoom.roomEnemy);
 var myAudio = new Audio(enemyCurrent.playedMusic);
@@ -20,6 +21,8 @@ var audioIsPlaying;
 var user = "";
 //Starts the fight
 function battleStart() {
+    console.log("Current room has enemy ?");
+    console.log(currentRoom.hasEnemy);
     //Searches for enemy currently in the room to check if he is active
     document.getElementById("GameText").textContent = "In the room you see " + "\n" + "\n" + enemyCurrent.name + "\n" + itemsInRoomName + "\n" + "What do you want to do ?" + "\n" + "attack (a), talk (t), run (r), inventory (i), pickup item (p), drop Item (d)";
     currentRoom = mapArray.find(i => i.posX === playerposX && i.posY === playerposY);
@@ -27,95 +30,92 @@ function battleStart() {
     //Debug
     console.log(currentRoom);
     enemyCurrent = enemyArray.find(i => i.id === currentRoom.roomEnemy);
-    if (enemyCurrent == null) {
-        console.log("No enemy here");
+    if (enemyIsFriend == true) {
+        currentRoom.hasEnemy = false;
     }
-    else {
-        if (audioIsPlaying != true) {
-            //Plays Enemy music
-            //myAudio.play();
-            audioIsPlaying = true;
+    if (audioIsPlaying != true) {
+        //Plays Enemy music
+        //myAudio.play();
+        audioIsPlaying = true;
+    }
+    var selection = choice;
+    if (selection != "r") {
+        if (enemyCurrent.isActive == false) {
+            // Makes enemy active
+            enemyCurrent.isActive = true;
+            //Creates new entry in current Array
+            activeEnemyArray.push(enemyCurrent);
         }
-        var selection = choice;
-        if (selection != "r") {
-            if (enemyCurrent.isActive == false) {
-                // Makes enemy active
-                enemyCurrent.isActive = true;
-                //Creates new entry in current Array
-                activeEnemyArray.push(enemyCurrent);
+        else {
+            console.log("already active");
+        }
+        //Reacts depending on choice
+        switch (selection) {
+            case ("t"): {
+                extraOption = 1;
+                battleIsActive = true;
+                break;
             }
-            else {
-                console.log("already active");
+            case ("a"): {
+                fight();
+                console.log("fight started");
+                extraOption = 2;
+                battleIsActive = true;
+                break;
             }
-            //Reacts depending on choice
-            switch (selection) {
-                case ("t"): {
-                    extraOption = 1;
-                    battleIsActive = true;
-                    break;
+            case ("i"): {
+                usePlayerInventory();
+                extraOption = 3;
+                battleIsActive = true;
+                break;
+            }
+            case ("p"): {
+                pickupItem();
+                extraOption = 4;
+                battleIsActive = true;
+                break;
+            }
+            case ("d"): {
+                dropItem();
+                extraOption = 5;
+                battleIsActive = true;
+                break;
+            }
+            default: {
+                if (currentRoom.hasEnemy == false) {
+                    document.getElementById("GameText").textContent = "In the room you see " + "\n" + "\n" + "\n" + itemsInRoomName + "\n" + "What do you want to do ?";
                 }
-                case ("a"): {
-                    fight();
-                    console.log("fight started");
-                    extraOption = 2;
-                    battleIsActive = true;
-                    break;
-                }
-                case ("i"): {
-                    usePlayerInventory();
-                    extraOption = 3;
-                    battleIsActive = true;
-                    break;
-                }
-                case ("p"): {
-                    pickupItem();
-                    extraOption = 4;
-                    battleIsActive = true;
-                    break;
-                }
-                case ("d"): {
-                    dropItem();
-                    extraOption = 5;
-                    battleIsActive = true;
-                    break;
-                }
-                default: {
-                    document.getElementById("GameText").textContent = "In the room you see " + "\n" + "\n" + enemyCurrent.name + "\n" + itemsInRoomName + "\n" + "What do you want to do ?" + "\n" + "attack (a), talk (t), run (r), inventory (i), pickup item (p), drop Item (d)";
+                else {
+                    document.getElementById("GameText").textContent = "In the room you see " + "\n" + "\n" + enemyCurrent.name + "\n" + itemsInRoomName + "\n" + "What do you want to do ?";
                     console.log("You´ve encountered a " + enemyCurrent.name + itemsInRoomName);
-                    extraOption = 0;
-                    battleIsActive = true;
-                    return;
                 }
+                extraOption = 0;
+                battleIsActive = true;
+                //return;
             }
-            console.log(activeEnemyArray);
         }
-        else if (selection == "r") {
-            console.log("You ran away from " + enemyCurrent.name);
-            // hier aus Battle bilschirm raus
-            myAudio.pause();
-            extraOption = 6;
-            battleIsActive = false;
-        }
+        console.log(activeEnemyArray);
+    }
+    else if (selection == "r") {
+        console.log("You ran away from " + enemyCurrent.name);
+        // hier aus Battle bilschirm raus
+        myAudio.pause();
+        extraOption = 6;
+        battleIsActive = false;
     }
 }
 //fighting option
 function fight() {
     //check if there is an enemy in the room
-    if (enemyCurrent == undefined) {
+    if (currentRoom.hasEnemy == false) {
         document.getElementById("GameText").textContent = "There is no enemy here";
     }
     else {
         //Player attacks enemy
         enemyCurrent.currentHealth = enemyCurrent.currentHealth - player.damage;
-        //If the enemy has item: decide on random factor if he uses it or attacks 
+        //If the enemy has less hp than max it uses item
         if (enemyCurrent.items.length != 0) {
-            var randomNumber = Math.floor(Math.random() * 3);
-            console.log(randomNumber);
-            if (randomNumber == 1) {
-                player.currentHealth = player.currentHealth - enemyCurrent.damage;
-                //useEnemyInventory();
-            }
-            if (randomNumber == 2) {
+            if (enemyCurrent.currentHealth < enemyCurrent.maximumHealth) {
                 useEnemyInventory();
             }
         }
@@ -137,16 +137,15 @@ function fight() {
                 document.getElementById("GameText").textContent = "The " + enemyCurrent.name + " " + "has been defeated";
                 activeEnemyArray.splice(activeEnemyArray.findIndex(i => i.currentHealth === 0), 1);
                 battleIsActive = false;
-                console.log("Deleted enemy array" + activeEnemyArray);
-                //delete enemy from Array
-                //activeEnemyArray.delete(enemyCurrent);#
-                //Now disable enemyisDefeated on map
+                //Tells the room that its enemy was defeated
+                currentRoom.hasEnemy = false;
+                console.log(activeEnemyArray);
             }
             if (player.currentHealth >= 0) {
                 document.getElementById("GameText2").textContent = "The enemy attacked you." + "Your health dropped to " + player.currentHealth;
             }
             else {
-                document.getElementById("GameText2").textContent = "Your health hit 0. You died";
+                document.getElementById("GameText2").textContent = "Your health hit zero. You died";
                 //funktion zum laden /resetten hier
             }
         }
@@ -178,7 +177,7 @@ function usePlayerInventory() {
                 }
                 case ("Key"): {
                     unlockDoor(requestedItem.id);
-                    //Hier nicht löschen, weil wiederverwertbar
+                    //Don´t delete key because it should be reusable
                     break;
                 }
             }
@@ -186,7 +185,6 @@ function usePlayerInventory() {
         else {
             document.getElementById("GameText").textContent = "You don´t have " + itemselected + " in your inventory";
         }
-        //extraOption = 0;
     }
 }
 function useEnemyInventory() {
@@ -293,14 +291,16 @@ function healing() {
     switch (user) {
         case ("player"): {
             player.currentHealth = player.maximumHealth;
-            document.getElementById("GameText").textContent = "You drank the potion. Your health was restored";
+            document.getElementById("GameText").textContent = "You drank the potion. Your health was restored to " + player.maximumHealth;
             //Debug
             console.log(activeEnemyArray);
             //Debug
+            break;
         }
         case ("enemy"): {
             enemyCurrent.currentHealth = enemyCurrent.maximumHealth;
             document.getElementById("GameText").textContent = "The " + enemyCurrent.name + " drank a potion. Its health was restored";
+            break;
         }
     }
 }
@@ -350,6 +350,15 @@ function talking() {
             interactWithEnemy3();
             break;
         }
+    }
+}
+//Looking at enemy
+function look() {
+    if (currentRoom.hasEnemy == true) {
+        document.getElementById("GameText").textContent = "You look at the enemy: " + enemyCurrent.description;
+    }
+    else {
+        document.getElementById("GameText").textContent = "There is no enemy to look at";
     }
 }
 //# sourceMappingURL=Battlesystem.js.map

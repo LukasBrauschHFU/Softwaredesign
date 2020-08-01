@@ -27,7 +27,7 @@ item2.name = "Ultrapotion";
 item2.description = "Restores your health to maximum";
 item2.id = 1;
 
-    //item2
+    //item3
 let item3: Item = new Item;
 item3.damage = 1;
 item3.effect = "";
@@ -38,9 +38,9 @@ item3.id = 2;
 // Legendary Item
 let itemBossroom: Item = new Item;
 itemBossroom.damage = 1;
-itemBossroom.effect = "stunn";
-itemBossroom.name = "TestitemBoss";
-itemBossroom.description = "Master Sword";
+itemBossroom.effect = "ThirdImpact";
+itemBossroom.name = "Fruits of Life and Wishdom";
+itemBossroom.description = "This combination, if consumed will grant the user godlike powers";
 itemBossroom.id = 3;
 
 export{item1, item2, item3, itemBossroom};    

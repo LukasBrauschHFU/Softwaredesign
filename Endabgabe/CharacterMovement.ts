@@ -1,6 +1,5 @@
 import {CreateMap, roomNotThere} from "./CreateWorld.js";
-import {mapArray} from "./Maps.js"; ;
-//import {battleStart} from "./Battlesystem.js";
+import {mapArray} from "./Maps.js"; 
 import {choice} from "./test.js";
 export var playerposX: number = 1;
 export var playerposY: number = 1;
@@ -20,6 +19,7 @@ function changePosition(direction: string): void {
     //Debug End
     
     switch (direction) {
+      
     // Changes Player position based on input
         case "n": { 
            //Check if Map needs a key to be accessed
@@ -40,7 +40,7 @@ function changePosition(direction: string): void {
       }
       else {
         document.getElementById("GameText").textContent = "You went east";
-        playerposX = playerposX - 1;
+        playerposX = playerposX + 1;
         successfullChangeCharaMovement = true; }
       break; 
      } 
@@ -51,7 +51,7 @@ function changePosition(direction: string): void {
       }
       else {
         document.getElementById("GameText").textContent = "You went west";
-        playerposX = playerposX + 1; 
+        playerposX = playerposX - 1; 
         successfullChangeCharaMovement = true; }
       break; 
      } 

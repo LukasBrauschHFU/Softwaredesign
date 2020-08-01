@@ -1,7 +1,5 @@
 import { CreateMap, roomNotThere } from "./CreateWorld.js";
 import { mapArray } from "./Maps.js";
-;
-//import {battleStart} from "./Battlesystem.js";
 import { choice } from "./test.js";
 export var playerposX = 1;
 export var playerposY = 1;
@@ -40,7 +38,7 @@ function changePosition(direction) {
             }
             else {
                 document.getElementById("GameText").textContent = "You went east";
-                playerposX = playerposX - 1;
+                playerposX = playerposX + 1;
                 successfullChangeCharaMovement = true;
             }
             break;
@@ -52,7 +50,7 @@ function changePosition(direction) {
             }
             else {
                 document.getElementById("GameText").textContent = "You went west";
-                playerposX = playerposX + 1;
+                playerposX = playerposX - 1;
                 successfullChangeCharaMovement = true;
             }
             break;

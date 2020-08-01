@@ -1,5 +1,5 @@
 import { changePosition } from "./CharacterMovement.js";
-import { battleStart, talking, fight, useItem, pickupItem, dropItem } from "./Battlesystem.js";
+import { battleStart, talking, fight, useItem, pickupItem, dropItem, look, currentRoom } from "./Battlesystem.js";
 export var choice = document.getElementById("textInput").value;
 export var btn = document.getElementById("button2");
 export var selectedOption = 0;
@@ -22,10 +22,16 @@ function fightingStart() {
     console.log(choice);
     battleStart();
     switch (level) {
+        case (2): {
+            talking();
+            level = 0;
+            break;
+        }
         case (1): {
             switch (selectedOption2) {
                 case ("t"): {
                     talking();
+                    level = 2;
                     break;
                 }
                 /*case("a"): {
@@ -59,6 +65,8 @@ function fightingStart() {
             switch (choice) {
                 case ("t"): {
                     talking();
+                    selectedOption2 = ("t");
+                    level = 1;
                     break;
                 }
                 case ("a"): {
@@ -73,6 +81,10 @@ function fightingStart() {
                     level = 1;
                     break;
                 }
+                case ("l"): {
+                    look();
+                    break;
+                }
                 case ("p"): {
                     pickupItem();
                     selectedOption2 = ("p");
@@ -80,19 +92,39 @@ function fightingStart() {
                     break;
                 }
                 case ("move north"): {
-                    changePosition("n");
+                    if (currentRoom.hasEnemy == true) {
+                        document.getElementById("GameText").textContent = "You cannot change rooms while an enemy is in there";
+                    }
+                    else {
+                        changePosition("n");
+                    }
                     break;
                 }
                 case ("move south"): {
-                    changePosition("s");
+                    if (currentRoom.hasEnemy == true) {
+                        document.getElementById("GameText").textContent = "You cannot change rooms while an enemy is in there";
+                    }
+                    else {
+                        changePosition("s");
+                    }
                     break;
                 }
                 case ("move east"): {
-                    changePosition("e");
+                    if (currentRoom.hasEnemy == true) {
+                        document.getElementById("GameText").textContent = "You cannot change rooms while an enemy is in there";
+                    }
+                    else {
+                        changePosition("e");
+                    }
                     break;
                 }
                 case ("move west"): {
-                    changePosition("w");
+                    if (currentRoom.hasEnemy == true) {
+                        document.getElementById("GameText").textContent = "You cannot change rooms while an enemy is in there";
+                    }
+                    else {
+                        changePosition("w");
+                    }
                     break;
                 }
                 case ("d"): {
@@ -103,6 +135,10 @@ function fightingStart() {
                 }
                 case ("6"): {
                     selectedOption = 0;
+                    break;
+                }
+                case ("commands"): {
+                    document.getElementById("Help").textContent = "commands: look(l), attack (a), talk (t), run (r), inventory (i), pickup item (p), drop Item (d), " + "move east, move west, move north, move south";
                     break;
                 }
                 default: {
