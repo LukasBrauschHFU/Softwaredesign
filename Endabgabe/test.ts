@@ -63,7 +63,7 @@ function fightingStart(): void {
                             talking();
                             selectedOption2 = ("t");
                             level = 1;
-                            break; }
+                            break; } 
                         case("a"): {
                             fight();
                             //selectedOption2 = ("a");
@@ -108,7 +108,7 @@ function fightingStart(): void {
                                 document.getElementById("GameText").textContent = "You cannot change rooms while an enemy is in there"; 
                               }
                               else {
-                            changePosition("w");}
+                            changePosition("w"); }
                             break; }               
                         case("d"): {
                             dropItem();
@@ -119,7 +119,7 @@ function fightingStart(): void {
                             selectedOption = 0;
                             break; }      
                         case("commands"): {
-                            document.getElementById("Help").textContent = "commands: look(l), attack (a), talk (t), run (r), inventory (i), pickup item (p), drop Item (d), "  + "move east, move west, move north, move south";
+                            document.getElementById("Help").textContent = "commands: look(l), attack (a), talk (t), run (r), inventory (i), pickup item (p), drop Item (d), look at friends (friends)"  + "move east, move west, move north, move south";
                             break; }                
                         default: {
                             break; }
