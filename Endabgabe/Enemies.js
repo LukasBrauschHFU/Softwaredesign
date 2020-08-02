@@ -8,7 +8,7 @@ export class Enemy {
         this.damage = 0;
         this.hiddenWeakness = "";
         this.description = "";
-        //inventory of enemie
+        //inventory of enemy
         this.items = [];
         //ID of enemy
         this.id = 0;
@@ -44,11 +44,11 @@ enemy2.description = "A dark looking knight";
 let enemy3 = new Enemy;
 enemy3.currentHealth = 1;
 enemy3.damage = 1;
-enemy3.name = "Steve";
+enemy3.name = "Filler";
 enemy3.id = 2;
 enemy3.items = [item1];
 enemy3.hiddenWeakness = "";
-enemy3.description = "Best Tech Support";
+enemy3.description = "Filler";
 //enemy3
 let enemy4 = new Enemy;
 enemy4.currentHealth = 30;
@@ -56,23 +56,23 @@ enemy4.maximumHealth = 30;
 enemy4.damage = 2;
 enemy4.name = "Wooden Golem";
 enemy4.id = 3;
-enemy4.items = [item1];
-enemy4.hiddenWeakness = "torch";
-enemy4.behavior = 0;
-enemy4.description = "His body looks kind of dry";
+enemy4.items = [];
+enemy4.hiddenWeakness = "garlic bread";
+enemy4.behavior = 2;
+enemy4.description = "His body looks kinda dry";
 // Bossenemy
 let enemyBoss = new Enemy;
 enemyBoss.currentHealth = 20;
 enemyBoss.maximumHealth = 20;
 enemyBoss.damage = 3;
-enemyBoss.name = "Master of the darkest edge";
+enemyBoss.name = "Momonga";
 enemyBoss.id = 4;
-enemyBoss.behavior = 2;
+enemyBoss.behavior = 3;
 enemyBoss.items = [item1];
-enemyBoss.description = "Prepare for battle";
+enemyBoss.description = "A big menancing skeleton wearing a dark robe ";
 enemyBoss.playedMusic = "https://webuser.hs-furtwangen.de/~brauschl/music/gameMusic/Ed/ve.mp3";
-pushenemys();
-function pushenemys() {
+pushEnemies();
+function pushEnemies() {
     enemyArray.push(enemy1);
     enemyArray.push(enemy2);
     enemyArray.push(enemy3);

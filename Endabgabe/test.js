@@ -1,19 +1,20 @@
 import { changePosition } from "./CharacterMovement.js";
-import { battleStart, talking, fight, useItem, pickupItem, dropItem, look, currentRoom } from "./Battlesystem.js";
+import { battleStart, talking, useItem, pickupItem, dropItem, currentRoom } from "./Battlesystem.js";
+import { triggerEnding } from "./EnemyInteraction.js";
 export var choice = document.getElementById("textInput").value;
 export var btn = document.getElementById("button2");
 export var selectedOption = 0;
 export var level = 0;
 var selectedOption2 = "";
-var btnstart = document.getElementById("coolbutton");
+var btnstart = document.getElementById("startButton");
 btnstart.addEventListener("click", () => showNewButton());
 btn.addEventListener("click", () => fightingStart());
 //Variable for pushing new text to the function that creates it
 var pushableText = "";
 function showNewButton() {
-    document.getElementById("coolbutton").style.display = "none";
+    document.getElementById("startButton").style.display = "none";
     document.getElementById("button2").style.display = "";
-    document.getElementById("GameText").textContent = "Welcome";
+    document.getElementById("GameText").textContent = "You wake up in a room that seems to be slightly lit by something burning. You have no memory of what happened yesterday night or how you ended up here. You take look at the backpack laying next to you and see that some kind of drink in an blue bottle is in there. As your eyes adjust to the darkness you begin to see 3 exits. Also, you find out that the burning thing in the middle of the room seems to be some kind of bread on a stick.";
 }
 function fightingStart() {
     choice = document.getElementById("textInput").value;
@@ -22,142 +23,125 @@ function fightingStart() {
     document.getElementById("Help").textContent = "";
     console.log(choice);
     battleStart();
-    switch (level) {
-        case (2): {
-            talking();
-            level = 0;
-            break;
-        }
-        case (1): {
-            switch (selectedOption2) {
-                case ("t"): {
-                    talking();
-                    level = 2;
-                    break;
-                }
-                case ("i"): {
-                    useItem();
-                    level = 0;
-                    break;
-                }
-                case ("p"): {
-                    pickupItem();
-                    level = 0;
-                    break;
-                }
-                case ("d"): {
-                    dropItem();
-                    level = 0;
-                    break;
-                }
-                case ("6"): {
-                    selectedOption = 0;
-                    break;
-                }
-                default: {
-                    break;
+    if (triggerEnding == true) {
+        document.getElementById("Help").textContent = "The End";
+    }
+    else {
+        switch (level) {
+            case (2): {
+                talking();
+                level = 0;
+                break;
+            }
+            case (1): {
+                switch (selectedOption2) {
+                    case ("t"): {
+                        talking();
+                        level = 2;
+                        break;
+                    }
+                    case ("i"): {
+                        useItem();
+                        level = 0;
+                        break;
+                    }
+                    case ("p"): {
+                        pickupItem();
+                        level = 0;
+                        break;
+                    }
+                    case ("d"): {
+                        dropItem();
+                        level = 0;
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
                 }
             }
-        }
-        case (0): {
-            switch (choice) {
-                case ("t"): {
-                    talking();
-                    selectedOption2 = ("t");
-                    level = 1;
-                    break;
-                }
-                case ("a"): {
-                    fight();
-                    //selectedOption2 = ("a");
-                    //level = 1;
-                    break;
-                }
-                case ("i"): {
-                    useItem();
-                    selectedOption2 = ("i");
-                    level = 1;
-                    break;
-                }
-                case ("l"): {
-                    look();
-                    break;
-                }
-                case ("p"): {
-                    pickupItem();
-                    selectedOption2 = ("p");
-                    level = 1;
-                    break;
-                }
-                case ("move north"): {
-                    if (currentRoom.hasEnemy == true) {
-                        document.getElementById("GameText").textContent = "You cannot change rooms while an enemy is in there";
+            case (0): {
+                switch (choice) {
+                    case ("t"): {
+                        talking();
+                        selectedOption2 = ("t");
+                        level = 1;
+                        break;
                     }
-                    else {
-                        changePosition("n");
+                    case ("i"): {
+                        useItem();
+                        selectedOption2 = ("i");
+                        level = 1;
+                        break;
                     }
-                    break;
-                }
-                case ("move south"): {
-                    if (currentRoom.hasEnemy == true) {
-                        document.getElementById("GameText").textContent = "You cannot change rooms while an enemy is in there";
+                    case ("p"): {
+                        pickupItem();
+                        selectedOption2 = ("p");
+                        level = 1;
+                        break;
                     }
-                    else {
-                        changePosition("s");
+                    case ("move north"): {
+                        if (currentRoom.hasEnemy == true) {
+                            document.getElementById("GameText").textContent = "You cannot change rooms while an enemy is in there";
+                        }
+                        else {
+                            changePosition("n");
+                        }
+                        break;
                     }
-                    break;
-                }
-                case ("move east"): {
-                    if (currentRoom.hasEnemy == true) {
-                        document.getElementById("GameText").textContent = "You cannot change rooms while an enemy is in there";
+                    case ("move south"): {
+                        if (currentRoom.hasEnemy == true) {
+                            document.getElementById("GameText").textContent = "You cannot change rooms while an enemy is in there";
+                        }
+                        else {
+                            changePosition("s");
+                        }
+                        break;
                     }
-                    else {
-                        changePosition("e");
+                    case ("move east"): {
+                        if (currentRoom.hasEnemy == true) {
+                            document.getElementById("GameText").textContent = "You cannot change rooms while an enemy is in there";
+                        }
+                        else {
+                            changePosition("e");
+                        }
+                        break;
                     }
-                    break;
-                }
-                case ("move west"): {
-                    if (currentRoom.hasEnemy == true) {
-                        document.getElementById("GameText").textContent = "You cannot change rooms while an enemy is in there";
+                    case ("move west"): {
+                        if (currentRoom.hasEnemy == true) {
+                            document.getElementById("GameText").textContent = "You cannot change rooms while an enemy is in there";
+                        }
+                        else {
+                            changePosition("w");
+                        }
+                        break;
                     }
-                    else {
-                        changePosition("w");
+                    case ("d"): {
+                        dropItem();
+                        selectedOption2 = ("d");
+                        level = 1;
+                        break;
                     }
-                    break;
-                }
-                case ("d"): {
-                    dropItem();
-                    selectedOption2 = ("d");
-                    level = 1;
-                    break;
-                }
-                case ("6"): {
-                    selectedOption = 0;
-                    break;
-                }
-                case ("commands"): {
-                    document.getElementById("Help").textContent = "commands: look(l), attack (a), talk (t), run (r), inventory (i), pickup item (p), drop Item (d), look at friends (friends)" + "move east, move west, move north, move south";
-                    break;
-                }
-                default: {
-                    break;
+                    case ("commands"): {
+                        document.getElementById("Help").textContent = "commands: look(l), attack (a), talk (t), run (r), inventory (i), pickup item (p), drop Item (d), Quit game (q) " + "move east, move west, move north, move south";
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
                 }
             }
         }
     }
     pushableText = document.getElementById("GameText").textContent;
-    ;
     addNewText();
     //document.getElementById("GameTextLast").textContent  =  document.getElementById("GameText").textContent; 
     document.getElementById("textInput").value = "";
 }
 function addNewText() {
     var newDiv = document.createElement("div");
-    // and give it some content 
     var newContent = document.createTextNode(pushableText);
-    // add the text node to the newly created div
     newDiv.appendChild(newContent);
-    // add the newly created element and its content into the DOM 
     var currentDiv = document.getElementById("div1");
     document.body.insertBefore(newDiv, currentDiv);
 }

@@ -2,33 +2,34 @@ import { enemyArray } from "./Enemies.js";
 import { mapArray } from "./Maps.js";
 import { enemyIsFriend } from "./EnemyInteraction.js";
 import { interactWithEnemy1, interactWithEnemy2, interactWithEnemy3 } from "./EnemyInteraction.js";
-import { playerposX, playerposY } from "./CharacterMovement.js";
+import { playerPosX, playerPosY, runToRoom } from "./CharacterMovement.js";
 import { choice, level } from "./test.js";
 import { itemArrayPlayer } from "./Items.js";
 import { player } from "./Player.js";
-export { battleStart, burning, talking, fight, usePlayerInventory as useItem, pickupItem, dropItem, look, extraOption };
-export var battleIsActive = false;
+export { battleStart, burning, talking, fight, usePlayerInventory as useItem, pickupItem, dropItem, look, };
 //Creates new Array for all currently active enemies
 export var activeEnemyArray = [];
 //Creates new Array for all currently active enemies
 // Looks for the room the player and enemy are currently in
-export var currentRoom = mapArray.find(i => i.posX === playerposX && i.posY === playerposY);
+export var currentRoom = mapArray.find(i => i.posX === playerPosX && i.posY === playerPosY);
 // Finds what enemy is currently in the room(unsure Type)
 export var enemyCurrent = enemyArray.find(i => i.id === currentRoom.roomEnemy);
 var myAudio = new Audio(enemyCurrent.playedMusic);
-var extraOption;
 var audioIsPlaying;
 var user = "";
 //Starts the fight
 function battleStart() {
-    console.log("Current room has enemy ?");
-    console.log(currentRoom.hasEnemy);
+    if (player.currentHealth <= 0) {
+        location.reload();
+    }
+    //console.log("Current room has enemy ?");
+    //console.log(currentRoom.hasEnemy);
     //Searches for enemy currently in the room to check if he is active
     document.getElementById("GameText").textContent = "In the room you see " + "\n" + "\n" + enemyCurrent.name + "\n" + itemsInRoomName + "\n" + "What do you want to do ?" + "\n" + "attack (a), talk (t), run (r), inventory (i), pickup item (p), drop Item (d)";
-    currentRoom = mapArray.find(i => i.posX === playerposX && i.posY === playerposY);
+    currentRoom = mapArray.find(i => i.posX === playerPosX && i.posY === playerPosY);
     var itemsInRoomName = currentRoom.items.map(a => a.name);
     //Debug
-    console.log(currentRoom);
+    // console.log(currentRoom);
     enemyCurrent = enemyArray.find(i => i.id === currentRoom.roomEnemy);
     if (enemyIsFriend == true) {
         currentRoom.hasEnemy = false;
@@ -51,57 +52,49 @@ function battleStart() {
         }
         //Reacts depending on choice
         switch (selection) {
-            case ("t"): {
-                extraOption = 1;
-                battleIsActive = true;
+            case ("l"): {
+                look();
                 break;
             }
             case ("a"): {
                 fight();
-                console.log("fight started");
-                extraOption = 2;
-                battleIsActive = true;
                 break;
             }
             case ("i"): {
                 usePlayerInventory();
-                extraOption = 3;
-                battleIsActive = true;
                 break;
             }
             case ("p"): {
                 pickupItem();
-                extraOption = 4;
-                battleIsActive = true;
                 break;
             }
             case ("d"): {
                 dropItem();
-                extraOption = 5;
-                battleIsActive = true;
+                break;
+            }
+            case ("q"): {
+                location.reload();
+                ;
                 break;
             }
             default: {
                 if (currentRoom.hasEnemy == false) {
-                    document.getElementById("GameText").textContent = "In the room you see " + "\n" + "\n" + "\n" + itemsInRoomName + "\n" + "What do you want to do ?";
+                    document.getElementById("GameText").textContent = currentRoom.description + "\n" + "In the room you see " + "\n" + "\n" + "\n" + itemsInRoomName + "\n" + "What do you want to do ?";
                 }
                 else {
-                    document.getElementById("GameText").textContent = "In the room you see " + "\n" + "\n" + enemyCurrent.name + "\n" + itemsInRoomName + "\n" + "What do you want to do ?";
+                    document.getElementById("GameText").textContent = currentRoom.description + "\n" + "In the room you see " + "\n" + "\n" + enemyCurrent.name + "\n" + itemsInRoomName + "\n" + "What do you want to do ?";
                     console.log("You´ve encountered a " + enemyCurrent.name + itemsInRoomName);
                 }
-                extraOption = 0;
-                battleIsActive = true;
                 //return;
             }
         }
         console.log(activeEnemyArray);
     }
     else if (selection == "r") {
-        console.log("You ran away from " + enemyCurrent.name);
+        document.getElementById("GameText").textContent = "You ran back to the previous room";
+        runToRoom();
         // hier aus Battle bilschirm raus
         myAudio.pause();
-        extraOption = 6;
-        battleIsActive = false;
     }
 }
 //fighting option
@@ -114,10 +107,8 @@ function fight() {
         //Player attacks enemy
         enemyCurrent.currentHealth = enemyCurrent.currentHealth - player.damage;
         //If the enemy has less hp than max it uses item
-        if (enemyCurrent.items.length != 0) {
-            if (enemyCurrent.currentHealth < enemyCurrent.maximumHealth) {
-                useEnemyInventory();
-            }
+        if (enemyCurrent.items.length != 0 && enemyCurrent.currentHealth < enemyCurrent.maximumHealth) {
+            useEnemyInventory();
         }
         else {
             player.currentHealth = player.currentHealth - enemyCurrent.damage;
@@ -125,37 +116,28 @@ function fight() {
                 document.getElementById("GameText").textContent = "You attacked the " + enemyCurrent.name + ". " + "Its health dropped to " + enemyCurrent.currentHealth;
                 if (player.currentHealth >= 0) {
                     document.getElementById("GameText2").textContent = "The enemy attacked you." + "Your health dropped to " + player.currentHealth;
-                    //extraOption = 0;
+                    // = 0;
                 }
                 else {
                     document.getElementById("GameText2").textContent = "Your health hit zero. You died";
-                    //funktion zum laden /resetten hier
                 }
-                //extraOption = 0;
+                // = 0;
             }
             else {
                 document.getElementById("GameText").textContent = "The " + enemyCurrent.name + " " + "has been defeated";
+                myAudio.pause();
                 activeEnemyArray.splice(activeEnemyArray.findIndex(i => i.currentHealth === 0), 1);
-                battleIsActive = false;
                 //Tells the room that its enemy was defeated
                 currentRoom.hasEnemy = false;
                 console.log(activeEnemyArray);
-            }
-            if (player.currentHealth >= 0) {
-                document.getElementById("GameText2").textContent = "The enemy attacked you." + "Your health dropped to " + player.currentHealth;
-            }
-            else {
-                document.getElementById("GameText2").textContent = "Your health hit zero. You died";
-                //funktion zum laden /resetten hier
             }
         }
     }
 }
 //Item useage
 function usePlayerInventory() {
-    var itemNames = itemArrayPlayer.map(a => a.name);
-    console.log(itemNames);
-    document.getElementById("GameText").textContent = "In your inventory you see " + itemNames;
+    var itemDescription = itemArrayPlayer.map(a => a.description);
+    document.getElementById("GameText").textContent = "In your inventory you see " + "\n" + itemDescription;
     if (level == 1) {
         //Select Item from Inventory
         var itemselected = choice;
@@ -163,19 +145,24 @@ function usePlayerInventory() {
         var requestedItem = itemArrayPlayer.find(i => i.name === itemselected);
         if (requestedItem != undefined) {
             user = "player";
-            switch (requestedItem.name) {
-                case ("Torch"): {
-                    burning();
-                    itemArrayPlayer.splice(itemArrayPlayer.findIndex(item => item.name === requestedItem.name), 1);
+            //Selects an effect based on the effect of the item
+            switch (requestedItem.effect) {
+                case ("burning"): {
+                    if (currentRoom.hasEnemy == true) {
+                        burning();
+                        itemArrayPlayer.splice(itemArrayPlayer.findIndex(item => item.name === requestedItem.name), 1);
+                    }
+                    else {
+                        document.getElementById("GameText").textContent = "There is no enemy here to use this on";
+                    }
                     break;
-                    //then remove item from inventory
                 }
-                case ("Ultrapotion"): {
+                case ("healing"): {
                     healing();
                     itemArrayPlayer.splice(itemArrayPlayer.findIndex(item => item.name === requestedItem.name), 1);
                     break;
                 }
-                case ("Key"): {
+                case ("unlock"): {
                     unlockDoor(requestedItem.id);
                     //Don´t delete key because it should be reusable
                     break;
@@ -189,15 +176,14 @@ function usePlayerInventory() {
 }
 function useEnemyInventory() {
     var enemyConsumedItem = enemyCurrent.items[0];
-    //system for Item use(add check if item is in player inventory)
-    switch (enemyConsumedItem.name) {
-        case ("Torch"): {
-            console.log("Enemy Uses Burning");
+    //system for Item use)
+    switch (enemyConsumedItem.effect) {
+        case ("burning"): {
             user = "enemy";
             burning();
             break;
         }
-        case ("Ultrapotion"): {
+        case ("healing"): {
             console.log("Enemy Uses Potion");
             user = "enemy";
             healing();
@@ -211,77 +197,79 @@ function useEnemyInventory() {
 function pickupItem() {
     console.log(currentRoom.items);
     var itemNames = currentRoom.items.map(a => a.name);
-    //console.log(itemNames);
-    document.getElementById("GameText").textContent = "Which of these items do you want to pick up: " + itemNames;
+    document.getElementById("GameText").textContent = "Which of these items do you want to pick up: " + "\n" + itemNames;
     if (level == 1) {
         //Select Item from Room
         var itemselected = choice;
-        //system for Item use(add check if item is in player inventory)
+        //system for Item use
         var requestedItem = currentRoom.items.find(i => i.name === itemselected);
         if (requestedItem !== undefined) {
             //remove Item from room and push to player
             currentRoom.items.splice(currentRoom.items.findIndex(item => item.name === requestedItem.name), 1);
             console.log(currentRoom.items);
             itemArrayPlayer.push(requestedItem);
-            console.log(itemArrayPlayer);
+            document.getElementById("GameText").textContent = "You picked up " + itemNames;
         }
         else if (itemselected == "none") {
             console.log("You didn´t use an item");
-            document.getElementById("GameText").textContent = "You didn´t use an item";
+            document.getElementById("GameText").textContent = "You didn´t pickup an item";
         }
         else {
             document.getElementById("GameText").textContent = "There is no Item of this name here";
-        } //extraOption = 0;
+        }
     }
 }
 //Drop item into room
 function dropItem() {
     console.log(itemArrayPlayer);
     var itemNames = itemArrayPlayer.map(a => a.name);
-    //console.log(itemNames);
+    console.log(itemNames);
     document.getElementById("GameText").textContent = "Which of these items do you want drop: " + itemNames;
-    //Select Item from Room
-    var itemselected = choice;
-    //system for Item use(add check if item is in player inventory)
-    var requestedItem = itemArrayPlayer.find(i => i.name === itemselected);
-    if (requestedItem !== undefined) {
-        //Delete selected Item from in ventory and push it into map
-        itemArrayPlayer.splice(itemArrayPlayer.findIndex(item => item.name === requestedItem.name), 1);
-        currentRoom.items.push(requestedItem);
-        console.log("Player inventory: " + itemArrayPlayer);
-        console.log("Room item:" + currentRoom.items);
+    if (level == 1) {
+        //Select Item from Room
+        var itemselected = choice;
+        //system for Item use(add check if item is in player inventory)
+        var requestedItem = itemArrayPlayer.find(i => i.name === itemselected);
+        if (requestedItem !== undefined) {
+            //Delete selected Item from in ventory and push it into map
+            itemArrayPlayer.splice(itemArrayPlayer.findIndex(item => item.name === requestedItem.name), 1);
+            currentRoom.items.push(requestedItem);
+            document.getElementById("GameText").textContent = "You dropped " + itemNames;
+        }
+        else if (itemselected == "none") {
+            console.log("You didn´t drop an item");
+            document.getElementById("GameText").textContent = "You didn´t drop an item";
+        }
+        else {
+            document.getElementById("GameText").textContent = "You have no Items to drop";
+        }
     }
-    else if (itemselected == "none") {
-        console.log("You didn´t drop an item");
-        document.getElementById("GameText").textContent = "You didn´t drop an item";
-    }
-    else {
-        console.log("No items left in this room");
-    }
-    extraOption = 0;
 }
 //status changes
 function burning() {
     //if funktion die schaut, ob es auf den Gegner oder spieler angewandt wird hier
     switch (user) {
         case ("player"): {
-            if (enemyCurrent.hiddenWeakness == "torch") {
+            if (enemyCurrent.hiddenWeakness == "garlic bread") {
                 enemyCurrent.currentHealth = 0;
                 document.getElementById("GameText").textContent = "The " + enemyCurrent.name + " burned down to a pile of ash that got carried away by a mysterious wind";
+                activeEnemyArray.splice(activeEnemyArray.findIndex(i => i.currentHealth === 0), 1);
+                //Tells the room that its enemy was defeated
+                currentRoom.hasEnemy = false;
             }
-            enemyCurrent.damage = enemyCurrent.damage - 1;
-            document.getElementById("GameText").textContent = "The " + enemyCurrent.name + "s damage was reduced by 1";
+            else {
+                enemyCurrent.damage = enemyCurrent.damage - 1;
+                document.getElementById("GameText").textContent = "The " + enemyCurrent.name + "s damage was reduced by 1";
+            }
             //activeEnemyArray.push(enemyCurrent);
             //Debug
-            console.log("playerUsedtorch");
-            console.log(activeEnemyArray);
             break;
             //Debug
         }
         case ("enemy"): {
             player.damage = player.damage - 1;
             console.log(player);
-            document.getElementById("GameText").textContent = "The " + enemyCurrent.name + "attacked you with a torch. Your damaged was reduced by 1";
+            document.getElementById("GameText").textContent = "The " + enemyCurrent.name + "attacked you with a loaf of burned garlic bread. Your damaged was reduced by 1";
             break;
         }
     }
@@ -304,27 +292,27 @@ function healing() {
         }
     }
 }
-function unlockDoor(sendItem) {
+function unlockDoor(_sendItem) {
     console.log("check Key");
-    console.log(sendItem);
+    console.log(_sendItem);
     var checkRoom1 = mapArray.find(i => i.posX === currentRoom.posX + 1);
     var checkRoom2 = mapArray.find(i => i.posX === currentRoom.posX - 1);
     var checkRoom3 = mapArray.find(i => i.posX === currentRoom.posY + 1);
     var checkRoom4 = mapArray.find(i => i.posX === currentRoom.posY - 1);
     //find Array Entry with currentRoom Pos x +1 etc, then check for key
-    if (checkRoom1 != undefined && checkRoom1.unlockItem == sendItem) {
+    if (checkRoom1 != undefined && checkRoom1.unlockItem == _sendItem) {
         checkRoom1.locked = false;
         console.log("Key matches");
     }
-    if (checkRoom2 != undefined && checkRoom2.unlockItem == sendItem) {
+    if (checkRoom2 != undefined && checkRoom2.unlockItem == _sendItem) {
         checkRoom2.locked = false;
         console.log("Key matches");
     }
-    if (checkRoom3 != undefined && checkRoom3.unlockItem == sendItem) {
+    if (checkRoom3 != undefined && checkRoom3.unlockItem == _sendItem) {
         checkRoom3.locked = false;
         console.log("Key matches");
     }
-    if (checkRoom4 != undefined && checkRoom4.unlockItem == sendItem) {
+    if (checkRoom4 != undefined && checkRoom4.unlockItem == _sendItem) {
         checkRoom4.locked = false;
         console.log("Key matches");
     }

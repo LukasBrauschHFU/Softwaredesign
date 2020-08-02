@@ -1,6 +1,6 @@
 import { item1, item2, item3, itemBossroom } from "./Items.js";
 export var mapArray = [];
-class Map {
+export class Map {
     constructor() {
         this.name = "";
         this.posX = 0;
@@ -13,7 +13,6 @@ class Map {
         this.roomEnemy = null;
         //Checks if there still is enemie in the room
         this.hasEnemy = false;
-        this.songAudio = "";
     }
 }
 //Positions: X + 1 = west, X - 1 = east, Y + 1 = north, Y -1 = south
@@ -24,7 +23,7 @@ map1.posY = 1;
 map1.name = "EnemyRoom1";
 map1.roomEnemy = 0;
 map1.hasEnemy = true;
-map1.description = "You are now in Map 1";
+map1.description = "This rooms seems to have been a bathroom. The old bathtub seems to be fileld with some kind of green goo";
 //Map2
 let map2 = new Map;
 map2.posX = 1;
@@ -32,7 +31,7 @@ map2.posY = 1;
 map2.name = "Startroom";
 map2.roomEnemy = 0;
 map2.items = [item1];
-map2.description = "You find yourself in a quiet dark room";
+map2.description = "You find yourself in a quiet dark room. It smells like burnt garlic bread";
 //Map3
 let map3 = new Map;
 map3.posX = 2;
@@ -41,7 +40,7 @@ map3.name = "Potionroom";
 map3.roomEnemy = 1;
 map3.hasEnemy = true;
 map3.items = [item2];
-map3.description = "You are now in Map 3";
+map3.description = "This rooms seems to have been a kitchen some time ago. Bottles are laying around everywhere";
 //Map4
 let map4 = new Map;
 map4.posX = 2;
@@ -49,7 +48,7 @@ map4.posY = 0;
 map4.name = "Keyroom";
 map4.roomEnemy = 0;
 map4.items = [item3];
-map4.description = "You are now in Map 54";
+map4.description = "This room looks strangely clean and intact. 4 chairs are standing around a table";
 //Map5
 let map5 = new Map;
 map5.posX = 1;
@@ -57,7 +56,7 @@ map5.posY = 0;
 map5.name = "Enemyroom3";
 map5.roomEnemy = 3;
 map5.hasEnemy = true;
-map5.description = "You are now in Map 6";
+map5.description = "The roof of this room is caved in. You see plants that seem to have take over the room a long time ago";
 // Bossroom
 let mapBossroom = new Map;
 mapBossroom.posX = 1;
@@ -68,7 +67,7 @@ mapBossroom.items = [itemBossroom];
 mapBossroom.hasEnemy = true;
 mapBossroom.locked = true;
 mapBossroom.unlockItem = 2;
-mapBossroom.description = "You feel a strong presense in this room";
+mapBossroom.description = "This room looks gigantic and has painted windows all over it. You feel a strong presense creeping upo to you";
 pushMaps();
 function pushMaps() {
     mapArray.push(map1);
