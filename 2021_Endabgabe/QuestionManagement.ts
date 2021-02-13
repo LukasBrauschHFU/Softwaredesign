@@ -2,14 +2,14 @@ import { Question, QuestionFactory } from './QuestionFactory';
 import {SelectionQuestion} from './SelectionQuestion';
 import { TextQuestion } from './TextQuestion';
 import { NumberQuestion } from './NumberQuestion';
-const readline = require('readline');
+import ConsoleHandling from '../bac/classes/ConsoleHandling';
+//const readline = require('readline');
 const fs = require('fs');
+
 
 class QuestionManagementClasss {
 
     private static _instance:QuestionManagementClasss = new QuestionManagementClasss();
-
-    private _score:number = 0;
 
     public _selectionQuestionArray: SelectionQuestion[] = [];  
     public _numberQuestionArray: NumberQuestion[] = [];  
@@ -19,6 +19,8 @@ class QuestionManagementClasss {
     public _totalNumberNumber: number = 0;
     public _totalNumberText: number = 0;
     public _totalNumberAllQuestions: number = 0;
+    public _quizCreator: number = 0;
+    public _isPublic: boolean = false;
    
 
     constructor() {
@@ -35,8 +37,11 @@ class QuestionManagementClasss {
    
     //Read Users from json und put them into an Array
     
-    public readQuestions(Title: string):void
-    {
+    public readQuestions(Title: String):void
+    {//Reset Question Arrays
+      this._selectionQuestionArray = [];
+      this._numberQuestionArray = [];
+      this._textQuestionArray = [];
      var filename: string = Title + ".json"
      let rawdata = fs.readFileSync(filename);
      let question = JSON.parse(rawdata);   
@@ -91,19 +96,17 @@ class QuestionManagementClasss {
    //    console.log(this._numberQuestionArray[1]);
        }
        this._totalNumberAllQuestions = question.amountQuizQuestions //Hier nochmal schauen
+       this._quizCreator = question.OwnerID;
+      // console.log("This question is " + question.IsPublic)
+       this._isPublic = question.IsPublic
+      // console.log("This creator number is" + this._quizCreator)
    
     }
     
     //Write User Array into Json
     //Save your quiz, choose your name
-    public writeQuestions(questionObject: any, questionType: string, isPublic: boolean, Owner: string, Title: string, amountQuizQuestions: number):void
-    {    //Hier nochmal schauen, ob das so geht, wegen Vaariablen, ansonsten halt mit import vaariablen oder hier einen input
-      //Title = Der Dateiname und Quizname
-        //Einzellne Arrays für Nummern
-         var filename: string = Title + ".json"//Console input here
-         
-       // var newID: number = this._totalNumberofUsers +1;
-       //Evtl noch eine for-loop, falls mehrere Fragen, alternativ: Jedes mal aufrufen, sobald eine Frage abgeschickt wurde oder Quizfragen-Array für dieses Quiz
+    public importQuestions(questionObject: any, questionType: string):void{  
+    //Import Questions into their arrays
      if (questionType ==="SelectionQuestion"){
          this._selectionQuestionArray.push(questionObject);
          this._totalNumberSelection++;
@@ -116,9 +119,12 @@ class QuestionManagementClasss {
         this._textQuestionArray.push(questionObject);
         this._totalNumberText++;
     }
-     //   var newQuestion: Question = new Question(newQuestionString, newID ,newAnswer);
-       // this._totalNumberofUsers++;
         console.log("Question added successfully")
+       }   
+
+   public writeFinalQuestions(isPublic: boolean, OwnerID: number, Title: String, amountQuizQuestions: number):void{     
+      //Title = Der Dateiname und Quizname
+        var filename: string = Title + ".json"//Console input here   
         var newSelectionData = this._selectionQuestionArray;
         var newNumberData = this._numberQuestionArray;
         var newTextData = this._textQuestionArray;
@@ -128,7 +134,7 @@ class QuestionManagementClasss {
             NumberQuestions: newNumberData,
             TextQuestions: newTextData,
             IsPublic: isPublic,
-            Owner: Owner,
+            OwnerID: OwnerID,
             amountQuizQuestions: amountQuizQuestions,
         };
         //Write Json file
@@ -136,7 +142,7 @@ class QuestionManagementClasss {
         let data = JSON.stringify(newObject, undefined, 2);
         fs.writeFileSync(filename, data);
         
-       }   
+       }  
     }
     export default QuestionManagementClasss.getInstance();
 

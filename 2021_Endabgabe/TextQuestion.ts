@@ -3,11 +3,11 @@ import { newID, newName, newPassword } from './main';
  //var enemyArray: Enemy[] = [];
 
 export class TextQuestion {
-    public questionString: string = "";
+    public questionString: String = "";
     public id: number = 0;
-    public correctAnswer: string = "";
+    public correctAnswer: String = "";
    
-    constructor(_name: string, _id: number, _correctAnswer: string,){
+    constructor(_name: String, _id: number, _correctAnswer: String,){
       //Evtl hier aus Json einlesen
       this.questionString = _name;
       this.id = _id;

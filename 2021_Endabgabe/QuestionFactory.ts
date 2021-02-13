@@ -9,7 +9,7 @@ export abstract class Question {
 }
 //Change maybe
 export class QuestionFactory {
-    public static create(questionType: string, question1: string, id: number, correctAnswer: string, wrongAnswer1: string, wrongAnswer2: string, wrongAnswer3: string, amountAnswers: number) {
+    public static create(questionType: string, question1: String, id: number, correctAnswer: String, wrongAnswer1: String, wrongAnswer2: String, wrongAnswer3: String, amountAnswers: number) {
         switch(questionType) {
             case 'SelectionQuestion':
                 return new SelectionQuestion(question1, id, correctAnswer, wrongAnswer1, wrongAnswer2, wrongAnswer3, amountAnswers)

@@ -3,13 +3,13 @@ import { newID, newName, newPassword } from './main';
  //var enemyArray: Enemy[] = [];
 
 export class NumberQuestion {
-    public questionString: string = "";
+    public questionString: String = "";
     public id: number = 0;
     public correctAnswer: number = 0;
     
 
 
-    constructor(_name: string, _id: number, _correctAnswer: number,){
+    constructor(_name: String, _id: number, _correctAnswer: number,){
       //Evtl hier aus Json einlesen
       this.questionString = _name;
       this.id = _id;

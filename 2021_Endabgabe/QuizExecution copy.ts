@@ -5,7 +5,6 @@ import Console from './ConsoleRead';
 import UserManagementClass from './UserManagement';
 import { sort } from './InitialChoices';
 import  ChoicesSingleton  from './ChoicesSingleton';
-import { checkServerIdentity } from 'tls';
 
 //Am Ende Arrays leeren
 var qmc = QuestionManagementClass;
@@ -15,18 +14,17 @@ export class QuizExecution{
 
 
 public async playQuiz(): Promise<void>{
-    // Scoreediting hier hin    
-let tempAmountAnswers: number = 0;    
-let tempCorrectAmountAnswers: number = 0;  
 //Read Quizname here
 let quizNameInput : String = await Console.question("What quiz do you want to load ?")  
-//check if quiz exists
-try{qmc.readQuestions(quizNameInput); }
-catch{
-    console.log("This quiz does not exist");
-    ChoicesSingleton.selection();
-} 
-if(qmc._isPublic == false && qmc._quizCreator !=  umc.currentUser?.id){
+qmc.readQuestions(quizNameInput);  
+//umc.currentUser.playedGames++
+
+
+//console.log(qmc._isPublic)
+//Check if Quiz is open, if not, check Username  
+//console.log("Current user id "+ currentUser.id)
+//console.log("Current quiz id "+ qmc._quizCreator)
+if(qmc._isPublic == false && umc.currentUser == undefined || qmc._quizCreator !=  umc.currentUser?.id){
     console.log("This quiz is private and was created by another user");
     ChoicesSingleton.selection();
 }
@@ -51,13 +49,14 @@ if(qmc._selectionQuestionArray[j]!= null){
             break;
         }
     }
-    console.log("j is" + j)
     let input : String = await Console.question("What is your Answer ?")
-    console.log("You answered" + input)
-    tempAmountAnswers++;
-    if(input === currentSelectionQuestion.correctAnswer ){
+   // console.log("You answered" + input)
+   umc.updateUsers(umc.currentUser?.id, "answeredQuestions");
+    if(input === currentSelectionQuestion?.correctAnswer ){
+        //Falls registriert, hier Score++
+
    console.log("Right")
-   tempCorrectAmountAnswers++;
+   umc.updateUsers(umc.currentUser?.id, "correctlyAnsweredQuestions");
     }
     else{
         console.log("wrong");
@@ -69,10 +68,11 @@ if(qmc._textQuestionArray[j]!= null){
     console.log(qmc._textQuestionArray[j].questionString);
     let input : String = await Console.question("What is your Answer ?")
     //console.log("You answered" + input + currentTextQuestion?.correctAnswer)
-    tempAmountAnswers++;
-    if(input === currentTextQuestion.correctAnswer){
+    umc.updateUsers(umc.currentUser?.id, "answeredQuestions");
+    if(input === currentTextQuestion?.correctAnswer){
+        //Falls registriert, hier Score++
    console.log("Right")
-   tempCorrectAmountAnswers++;
+   umc.updateUsers(umc.currentUser?.id, "correctlyAnsweredQuestions");
     }
     else{
         console.log("wrong");
@@ -85,23 +85,21 @@ if(qmc._numberQuestionArray[j]!= null){
  let input : String = await Console.question("What is your Answer ?")
  var convertedInput: number = +input;
  //Add answeredquestioncounter
- tempAmountAnswers++;
- if(convertedInput === currentNumberQuestion.correctAnswer ){
+ umc.updateUsers(umc.currentUser?.id, "answeredQuestions");
+ if(convertedInput === currentNumberQuestion?.correctAnswer ){
      //Falls registriert, hier Score++
 console.log("Right")
-tempCorrectAmountAnswers++;
+umc.updateUsers(umc.currentUser?.id, "correctlyAnsweredQuestions");
  }
  else{
      console.log("wrong");
  }
- 
+ //Return to startsite and increase number of played games
+ umc.updateUsers(umc.currentUser?.id, "playedGames");
+ ChoicesSingleton.selection();
 }
 
-}
-//Return to startsite and increase number of played games/answers
-console.log(tempCorrectAmountAnswers,tempAmountAnswers)
-umc.updateUsers(umc.currentUser.id, tempAmountAnswers,tempCorrectAmountAnswers);
-ChoicesSingleton.selection();}
+}}
 
 }
 }

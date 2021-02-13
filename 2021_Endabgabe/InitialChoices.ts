@@ -6,13 +6,12 @@ import { User } from './User';
 import UserManagementClass  from './UserManagement';
 import QuestionManagementClass  from './QuestionManagement';
 import {Question, QuestionFactory} from './QuestionFactory'
-import  ChoicesSingleton  from './ChoicesSingleton'
+import {QuizExecution} from './QuizExecution'
 import { SelectionQuestion } from './SelectionQuestion';
 import { createQuiz } from './QuizCreation';
 import Console from './ConsoleRead';
 import { MovieDatabase} from './MovieDatabase';
 import { waitForDebugger } from 'inspector';
-import { sortAndDeduplicateDiagnostics } from 'typescript';
 //const readline = require('readline');
 //const fs = require('fs');
 
@@ -20,12 +19,25 @@ import { sortAndDeduplicateDiagnostics } from 'typescript';
 //let Users = require('./Users');
 //var myClass = new Users.MyNameSpace.Enemy
 
-//Todo: Fragen limuitieren auf 10 + evtl Quiznamenlistung in einem neuen Json
+export class sort {
 
-reload();
+public async selection(): Promise<void> {
+    let choice : String = await Console.question("What do you want to do ?")
+    UserManagementClass.readUsers();
+   switch(choice){
+   case "1": {
+    UserManagementClass.userLogin()
+   break;
+   }
+   case "2": {
+    var test: QuizExecution = new QuizExecution;
+       test.playQuiz();
+       break;
+   }
 
-function reload(): void{
-    ChoicesSingleton.selection();
+   }
+
 
 }
+    }
 

@@ -3,15 +3,15 @@
  //var enemyArray: Enemy[] = [];
 
 export class SelectionQuestion {
-    public questionString: string = "";
+    public questionString: String = "";
     public id: number = 0;
-    public correctAnswer: string = "";
-    public wrongAnswer1: string = "";
-    public wrongAnswer2: string = "";
-    public wrongAnswer3: string = "";
+    public correctAnswer: String = "";
+    public wrongAnswer1: String = "";
+    public wrongAnswer2: String = "";
+    public wrongAnswer3: String = "";
     public amountAnswers: number = 2;
     
-    constructor(_name: string, _id: number, _correctAnswer: string, _wrongAnswer1: string, _wrongAnswer2: string, _wrongAnswer3: string, _amountAnswers: number){
+    constructor(_name: String, _id: number, _correctAnswer: String, _wrongAnswer1: String, _wrongAnswer2: String, _wrongAnswer3: String, _amountAnswers: number){
       this.questionString = _name;
       this.id = _id;
       this.correctAnswer = _correctAnswer;
