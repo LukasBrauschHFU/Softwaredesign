@@ -4,11 +4,8 @@ export var newName: string = "0";
 export var newPassword: string = "0";
 import { User } from './User';
 import UserManagementClass  from './UserManagement';
-import QuestionManagementClass  from './QuestionManagement';
-import {Question, QuestionFactory} from './QuestionFactory'
 import {QuizExecution} from './QuizExecution'
 import { SelectionQuestion } from './SelectionQuestion';
-import { createQuiz } from './QuizCreation';
 import Console from './ConsoleRead';
 import { MovieDatabase} from './MovieDatabase';
 import { waitForDebugger } from 'inspector';

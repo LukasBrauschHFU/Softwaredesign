@@ -1,34 +1,33 @@
 //Evtl nach Questionmanagement auslagern
-import { Question } from './QuestionFactory';
+//import { Question } from './QuestionFactory';
 import QuestionManagementClass from './QuestionManagement';
 import Console from './ConsoleRead';
 import UserManagementClass from './UserManagement';
 import { sort } from './InitialChoices';
-import  ChoicesSingleton  from './ChoicesSingleton';
+import  ChoicesSingletonClass  from './ChoicesSingleton';
 import { checkServerIdentity } from 'tls';
 
-//Am Ende Arrays leeren
 var qmc = QuestionManagementClass;
 var umc = UserManagementClass;
 export class QuizExecution{
-//Fragenanzahl importieren aus String
 
-
-public async playQuiz(): Promise<void>{
-    // Scoreediting hier hin    
+public async playQuiz(): Promise<void>{   
 let tempAmountAnswers: number = 0;    
 let tempCorrectAmountAnswers: number = 0;  
+//Quizname reader here
+console.log("You can choose one of these quiz: ")
+qmc.readQuizNames();
 //Read Quizname here
-let quizNameInput : String = await Console.question("What quiz do you want to load ?")  
+let quizNameInput : String = await Console.question("What quiz do you want to load ?") 
 //check if quiz exists
 try{qmc.readQuestions(quizNameInput); }
 catch{
     console.log("This quiz does not exist");
-    ChoicesSingleton.selection();
+    ChoicesSingletonClass.selection();
 } 
 if(qmc._isPublic == false && qmc._quizCreator !=  umc.currentUser?.id){
     console.log("This quiz is private and was created by another user");
-    ChoicesSingleton.selection();
+    ChoicesSingletonClass.selection();
 }
 else if(qmc._isPublic == true || qmc._quizCreator == umc.currentUser.id) {
 for (var j: number = 0; j <= qmc._totalNumberAllQuestions; j++){
@@ -101,7 +100,7 @@ tempCorrectAmountAnswers++;
 //Return to startsite and increase number of played games/answers
 console.log(tempCorrectAmountAnswers,tempAmountAnswers)
 umc.updateUsers(umc.currentUser.id, tempAmountAnswers,tempCorrectAmountAnswers);
-ChoicesSingleton.selection();}
+ChoicesSingletonClass.selection();}
 
 }
 }

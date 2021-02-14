@@ -1,6 +1,6 @@
 import { sort } from './InitialChoices'
 import { User } from './User';
-import  ChoicesSingleton  from './ChoicesSingleton'
+import  ChoicesSingletonClass  from './ChoicesSingleton'
 import Console from './ConsoleRead';
 const readline = require('readline');
 const fs = require('fs');
@@ -33,21 +33,21 @@ class UserManagementClass {
     {
         //Empty current user Array
      this._userArray= []   
-     let rawdata = fs.readFileSync('student-2.json');
+     let rawdata = fs.readFileSync('RegisteredUsers.json');
      try{
-     let student = JSON.parse(rawdata);   
+     let tempUser = JSON.parse(rawdata);   
      //Reset number of users in case the number was modified before 
      this._totalNumberofUsers = 0;
      //As long as users exist in the json file, push them into the User array
-     for(let j: number = 0; student.Users[j] != undefined ; j++){ 
-     //Raise totalNumberofStudents     
+     for(let j: number = 0; tempUser.Users[j] != undefined ; j++){ 
+     //Raise totalNumberoftempUsers     
      this._totalNumberofUsers++;
-     var readID = student.Users[j].id;
-     var readName = student.Users[j].name ;
-     var readPassword =student.Users[j].password ;
-     var readPlayedGames = student.Users[j].playedGames;
-     var readAnsweredQuestions = student.Users[j].answeredQuestions;
-     var readCorrectlyAnsweredQuestions = student.Users[j].correctlyAnsweredQuestions;
+     var readID = tempUser.Users[j].id;
+     var readName = tempUser.Users[j].name ;
+     var readPassword =tempUser.Users[j].password ;
+     var readPlayedGames = tempUser.Users[j].playedGames;
+     var readAnsweredQuestions = tempUser.Users[j].answeredQuestions;
+     var readCorrectlyAnsweredQuestions = tempUser.Users[j].correctlyAnsweredQuestions;
      let existingUser: User = new User(readName, readID , readPassword, readPlayedGames, readAnsweredQuestions, readCorrectlyAnsweredQuestions );
    //  console.log(newUser.name);
      this._userArray.push(existingUser);
@@ -63,13 +63,20 @@ class UserManagementClass {
     public async createUsers(): Promise<void>{
         let userName : String = await Console.question("What is your username ?")
         let userPassword : String = await Console.question("What is your password ?")
+        let convertedPassword: string = userPassword.toString()
+        //Check for special characters
+        var regex = /^[A-Za-z0-9 ]+$/
+        var regexCheck = regex.test(convertedPassword);
+        if (!regexCheck) {
+            console.log("Password cannot include special characters.");
+            ChoicesSingletonClass.selection()
+        }
+        else{
         var newID: number = this._totalNumberofUsers +1;
         var newName: String = userName;
         var newPassword: String = userPassword;
             //Check, if name is already in use
         var usedName = this._userArray.find(x => x.name === newName);
-        console.log(this._userArray)
-      //console.log(usedName?.name)
         if(newName == usedName?.name){
             console.log("This Username already exists. Please choose another Username")
         }
@@ -87,14 +94,11 @@ class UserManagementClass {
         };
         //Write Json file
         let data = JSON.stringify(newObject, undefined, 2);
-        fs.writeFileSync('student-2.json', data);
-        //Reset user Array
-     //   this._userArray = [];
-     //   console.log("Current Array:" + this._userArray)
-     //If there was no User previously, to prevent errors read new json file
+        fs.writeFileSync('RegisteredUsers.json', data);
       this.readUsers();
-      ChoicesSingleton.selection();
+      ChoicesSingletonClass.selection();
        }
+    }
 
        public async updateUsers(playerID: number, updateAnsweredQuestions: number, updateCorrectlyAnsweredQuestions: number ): Promise<void>{
            //For updating scores etc
@@ -114,7 +118,7 @@ class UserManagementClass {
         };
         //Write Json file
         let data = JSON.stringify(newObject, undefined, 2);
-        fs.writeFileSync('student-2.json', data);
+        fs.writeFileSync('RegisteredUsers.json', data);
      //If there was no User previously, to prevent errors read new json file
       this.readUsers();}
       else{
@@ -123,7 +127,7 @@ class UserManagementClass {
           this.currentUser.playedGames++;
           console.log(this.currentUser.playedGames)
       }
-      ChoicesSingleton.selection();
+      ChoicesSingletonClass.selection();
        }
        
        public async userLogin(): Promise<void>{ 
@@ -132,17 +136,17 @@ class UserManagementClass {
         let userPassword : String = await Console.question("What is your password ?")
         var requestedUser = this._userArray.find(x => x.name === userName);
         if(requestedUser?.password == userPassword){
-        requestedUser.loginStatus = true; //Hoffen, das geht noch
+       // requestedUser.loginStatus = true; 
         this.currentUser = requestedUser;
       //  console.log(this.currentUser)
         console.log("You have sucessfully logged in");
-        ChoicesSingleton.selection();
+        ChoicesSingletonClass.selection();
     }  
         else{
             console.log("Password or Username incorrect")
-            ChoicesSingleton.selection();
+            ChoicesSingletonClass.selection();
         }
-    ChoicesSingleton.selection() 
+    ChoicesSingletonClass.selection() 
     } 
     }
     export default UserManagementClass.getInstance();

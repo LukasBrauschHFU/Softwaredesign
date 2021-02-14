@@ -2,11 +2,11 @@ import {SelectionQuestion} from "./SelectionQuestion";
 import {NumberQuestion} from "./NumberQuestion";
 import {TextQuestion} from "./TextQuestion";
 
-export abstract class Question {
-    questionString: string  = ""; 
-    id: number= 0;
-    correctAnswer: any  ;
-}
+//export abstract class Question {
+ //   questionString: string  = ""; 
+ //   id: number= 0;
+  //  correctAnswer: any  ;
+//}
 //Change maybe
 export class QuestionFactory {
     public static create(questionType: string, question1: String, id: number, correctAnswer: String, wrongAnswer1: String, wrongAnswer2: String, wrongAnswer3: String, amountAnswers: number) {
@@ -19,7 +19,7 @@ export class QuestionFactory {
             case 'TextQuestion':
                 return new TextQuestion(question1, id, correctAnswer);    
             default:
-                throw new Error('This type of question does not exist');
+                console.log('This type of question does not exist');
         }
     }
 }

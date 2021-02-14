@@ -6,7 +6,7 @@ export class User {
     public name: String = "";
     public id: number = 0;
     public password: String = "";
-    public loginStatus: boolean = false;
+   // public loginStatus: boolean = false;
     public playedGames: number = 0;
     public answeredQuestions: number = 0;
     public correctlyAnsweredQuestions: number = 0;

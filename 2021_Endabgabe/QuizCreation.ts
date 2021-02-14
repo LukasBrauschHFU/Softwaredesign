@@ -4,9 +4,9 @@ import { initial } from 'lodash';
 import Console from './ConsoleRead';
 import { NumberQuestion } from './NumberQuestion';
 import UserManagementClass from './UserManagement';
-import { Question, QuestionFactory } from './QuestionFactory';
+import { QuestionFactory } from './QuestionFactory';
 import QuestionManagementClass from './QuestionManagement';
-import ChoicesSingleton from './ChoicesSingleton';
+import ChoicesSingletonClass from './ChoicesSingleton';
 
 const fs = require('fs')
 
@@ -24,32 +24,63 @@ public async createQuiz(): Promise<void>{
  //   var quizIsPublic: boolean = false
      //Check if logged in
      currentlyCreatedQuestions = 0;
-     if(umc.currentUser != undefined){
+     //Das hier weglöschen
+ //    if(umc.currentUser != undefined){
      var creatorID: number = umc.currentUser.id;    
+     //List existing Quizes
+     console.log("The following quizes already exist: ");
+     qmc.readQuizNames();
      //Namensinput quiz here  
     var quizName: String = await Console.question("What do you want to call your quiz ?")
     
     try{let rawdata = fs.readFileSync(quizName + ".json")
-        let test = JSON.parse(rawdata)
+        //let test = JSON.parse(rawdata)
         console.log("A quiz with this name already exists. Please try again with another name")
-        ChoicesSingleton.selection() 
+        ChoicesSingletonClass.selection() 
     
     }
    catch{console.log("working name")}     
    
-for (var j: number = 0; j <= 9; j++){
+for (var j: number = 0; j <= 10; ){
     //Hier ein if, falls 10 Fragen erreicht wurden
     console.log("You have created " + currentlyCreatedQuestions + " questions in this quiz so far")
    // console.log(j)
-    var initialInput: String = await Console.question("Do you want to add more questions ?")
-
+   //Fix für j erhöht bei invalidem input
+   if(currentlyCreatedQuestions == 10){
+       var saveQuiz = await Console.question("You have created the max amount of questions for this quiz. Do you wish to save it ?")
+       if(saveQuiz == "No"){
+        qmc._numberQuestionArray = [];
+        qmc._selectionQuestionArray = []
+        qmc._textQuestionArray = []
+        ChoicesSingletonClass.selection() 
+        break;}
+        else{
+            var publicInput: String = await Console.question("Do you want your quiz to be public ?")
+        
+            if (publicInput == "Yes"){//Public expression here
+                qmc.writeFinalQuestions(true, creatorID, quizName, currentlyCreatedQuestions )
+                console.log("Written file sucessfully")
+                ChoicesSingletonClass.selection() 
+            }
+            else if (publicInput == "No"){
+                qmc.writeFinalQuestions(false, creatorID, quizName, currentlyCreatedQuestions )
+                console.log("Written file sucessfully")
+                ChoicesSingletonClass.selection() 
+            }
+        }
+   }
+   else{
+    var continueInput: String = await Console.question("Do you want to add more questions ?")
+   // if(continueInput != "No" || "Yes"){
+   //     console.log("Unknown command");
+   // }
     //Debug
   //  if( currentlyCreatedQuestions >= 7){
   //      initialInput = "No"
   //  }
     //!Debug
     
-    if(initialInput == "No"){
+    if(continueInput == "No"){
         if (currentlyCreatedQuestions <3){
             var deleteQuiz: String = await Console.question("You need to add at least 3 questions to save your quiz. Do you want to discard it")
             //Delete temporary Quiz arrays if wanted
@@ -57,7 +88,7 @@ for (var j: number = 0; j <= 9; j++){
             qmc._numberQuestionArray = [];
             qmc._selectionQuestionArray = []
             qmc._textQuestionArray = []
-            ChoicesSingleton.selection() 
+            ChoicesSingletonClass.selection() 
             break;}
             else{
             }
@@ -69,26 +100,20 @@ for (var j: number = 0; j <= 9; j++){
         if (publicInput == "Yes"){//Public expression here
             qmc.writeFinalQuestions(true, creatorID, quizName, currentlyCreatedQuestions )
             console.log("Written file sucessfully")
-            //Delete temporary Quiz arrays
-            qmc._numberQuestionArray = [];
-            qmc._selectionQuestionArray = []
-            qmc._textQuestionArray = []
-            ChoicesSingleton.selection() 
+            //Delete temporary Quiz array
+            ChoicesSingletonClass.selection() 
         }
         else if (publicInput == "No"){
             qmc.writeFinalQuestions(false, creatorID, quizName, currentlyCreatedQuestions )
             console.log("Written file sucessfully")
             //Delete temporary Quiz arrays
-            qmc._numberQuestionArray = [];
-            qmc._selectionQuestionArray = []
-            qmc._textQuestionArray = []
-            ChoicesSingleton.selection() 
+            ChoicesSingletonClass.selection() 
         }
         break;
         }
         
     }
-    else if (initialInput == "Yes"){
+    else if (continueInput == "Yes"){
         var questionTypeInput: String = await Console.question("What type of question do you want to create ?")
         if(questionTypeInput == "SelectionQuestion") {
             var question: String = await Console.question("Please enter your question here")
@@ -109,6 +134,7 @@ for (var j: number = 0; j <= 9; j++){
             const newSelectionQuestion: any = QuestionFactory.create('SelectionQuestion', question, qmc._totalNumberSelection+1, splittedAnswer[0], splittedAnswer[1], splittedAnswer[2], splittedAnswer[3], amountCurrentAnswers, );
             QuestionManagementClass.importQuestions(newSelectionQuestion, "SelectionQuestion");
             currentlyCreatedQuestions++;
+            j++
             //break;
         }
         }
@@ -118,6 +144,7 @@ for (var j: number = 0; j <= 9; j++){
             const newTextQuestion: any = QuestionFactory.create('TextQuestion', question, qmc._totalNumberText+1, answer, "", "", "", 0, );
             QuestionManagementClass.importQuestions(newTextQuestion, "TextQuestion");
             currentlyCreatedQuestions++;
+            j++
          //   break;
         }
         else if(questionTypeInput == "NumberQuestion") {
@@ -126,19 +153,21 @@ for (var j: number = 0; j <= 9; j++){
             const newNumberQuestion: any = QuestionFactory.create('NumberQuestion', question, qmc._totalNumberNumber+1, answer, "", "", "", 0, );
             QuestionManagementClass.importQuestions(newNumberQuestion, "NumberQuestion");
             currentlyCreatedQuestions++;
+            j++
            // break;
         }
         else {
            console.log("You did not enter a valid question type")
            //break; 
         }
+    }
   }
 }
  }
- else{
-     console.log("You need to be logged in to use this feature")
- }
-}
+/// else{
+//     console.log("You need to be logged in to use this feature")
+// }
+//}
 
 }
 

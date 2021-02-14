@@ -9,7 +9,7 @@ export class SelectionQuestion {
     public wrongAnswer1: String = "";
     public wrongAnswer2: String = "";
     public wrongAnswer3: String = "";
-    public amountAnswers: number = 2;
+    public amountAnswers: number = 0;
     
     constructor(_name: String, _id: number, _correctAnswer: String, _wrongAnswer1: String, _wrongAnswer2: String, _wrongAnswer3: String, _amountAnswers: number){
       this.questionString = _name;
